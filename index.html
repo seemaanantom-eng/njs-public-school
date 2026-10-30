@@ -1,0 +1,3071 @@
+<!doctype html>
+<html lang="hi"><head>
+  <script type="module" src="/@vite/client"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NJS Public School | Excellence in Education &amp; AI Portal</title>
+  <meta name="description" content="NJS Public School - Creator of Knowledge. Official portal with embedded AI School Assistant, holiday verification, circulars, Hastinapur excursions, 400m Olympic track, and YouTube @anantgahlaut.">
+  <link rel="icon" href="https://seemaanantom-eng.github.io/NJSpublicSchool/apple.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&amp;family=Poppins:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <!-- Firebase App & Realtime Database Compat SDK (v10 CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --secondary: #1e293b;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --youtube-red: #ff0000;
+      --indigo: #4f46e5;
+      --amber: #f59e0b;
+      --text: #334155;
+      --text-light: #64748b;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.15);
+      --radius: 18px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    /* Top Announcement Bar */
+    .top-bar {
+      background: #090d16;
+      color: #94a3b8;
+      font-size: 0.82rem;
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .top-bar a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .top-bar .yt-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 0, 0, 0.15);
+      color: #ff6b6b;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 0, 0, 0.3);
+    }
+    .top-bar .yt-badge:hover {
+      background: #ff0000;
+      color: #fff;
+    }
+    .top-bar .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    /* Main Navigation */
+    header {
+      background: var(--white);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+    .logo-img {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .logo-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .logo-text p {
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    nav ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+      align-items: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: var(--indigo);
+    }
+    .btn-ai-nav {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #fff !important;
+      padding: 8px 18px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem !important;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      cursor: pointer;
+      border: none;
+    }
+    .btn-yt {
+      background: #ff0000;
+      color: #fff !important;
+      padding: 8px 16px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem !important;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #090e17 0%, #1e1b4b 50%, #0f172a 100%);
+      color: var(--white);
+      padding: 70px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #34d399;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+    .hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: #cbd5e1;
+      max-width: 680px;
+      margin: 0 auto 30px;
+      font-weight: 300;
+    }
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      padding: 12px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      padding: 12px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Embedded AI Quick Assistant Section */
+    .ai-banner-section {
+      background: linear-gradient(135deg, #042f2e 0%, #064e3b 50%, #0f172a 100%);
+      border-radius: 24px;
+      padding: 36px 30px;
+      color: #fff;
+      margin-bottom: 50px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 15px 35px -10px rgba(4, 47, 46, 0.4);
+      position: relative;
+    }
+    .ai-banner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .ai-banner-title h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #a7f3d0;
+      margin-bottom: 6px;
+    }
+    .ai-banner-title p {
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+    .ai-quick-inputs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .ai-quick-inputs input {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(15, 23, 42, 0.8);
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+    }
+    .ai-quick-inputs input:focus {
+      border-color: #34d399;
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.2);
+    }
+    .ai-quick-inputs button {
+      background: #10b981;
+      color: #fff;
+      border: none;
+      padding: 0 24px;
+      border-radius: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .ai-quick-inputs button:hover {
+      background: #059669;
+    }
+    @keyframes pulseMic {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    .mic-btn {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: #34d399;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 17px;
+    }
+    .mic-btn:hover {
+      background: rgba(16, 185, 129, 0.35);
+      color: #fff;
+      transform: scale(1.05);
+    }
+    .mic-btn.listening {
+      background: #ef4444 !important;
+      border-color: #ef4444 !important;
+      color: #fff !important;
+      animation: pulseMic 1.4s infinite !important;
+    }
+    .ai-preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .ai-chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #e2e8f0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ai-chip:hover {
+      background: rgba(16, 185, 129, 0.25);
+      border-color: #34d399;
+      color: #fff;
+    }
+    .ai-response-box {
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 16px;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      display: none;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    /* YouTube Section */
+    .yt-section {
+      background: linear-gradient(135deg, #180505 0%, #290808 50%, #150202 100%);
+      border-radius: 24px;
+      padding: 40px 36px;
+      color: #fff;
+      margin-bottom: 60px;
+      border: 1px solid rgba(255, 0, 0, 0.2);
+      box-shadow: 0 15px 35px -10px rgba(255, 0, 0, 0.25);
+    }
+    .yt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .yt-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #ff6b6b;
+      margin-bottom: 6px;
+    }
+    .yt-header p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+    .btn-subscribe {
+      background: #ff0000;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+    }
+    .btn-subscribe:hover {
+      background: #cc0000;
+    }
+
+    /* Pillars */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+    .pillar-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--accent);
+      transition: transform 0.2s;
+    }
+    .pillar-card:hover {
+      transform: translateY(-4px);
+    }
+    .pillar-card h4 {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pillar-card p {
+      color: var(--text-light);
+      font-size: 0.92rem;
+    }
+
+    /* Notice Board Section in HTML */
+    .notices-section {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 36px 30px;
+      box-shadow: var(--shadow);
+      margin-bottom: 60px;
+      border: 1px solid #e2e8f0;
+    }
+    .notices-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .notices-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    .notice-item {
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border-left: 4px solid #10b981;
+    }
+    .notice-item.holiday {
+      border-left-color: #ef4444;
+      background: #fef2f2;
+    }
+    .notice-item.exam {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+    }
+    .notice-title {
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .notice-date {
+      font-size: 0.75rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .notice-desc {
+      font-size: 0.88rem;
+      color: #334155;
+    }
+
+    /* Floating AI Chat Assistant Widget */
+    .ai-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.45);
+      cursor: pointer;
+      z-index: 999;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 3px solid rgba(255, 255, 255, 0.8);
+    }
+    .ai-fab:hover {
+      transform: scale(1.08) rotate(5deg);
+    }
+    .ai-fab-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ff0000;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 10px;
+      border: 2px solid #fff;
+    }
+
+    /* Floating Chat Drawer Window */
+    .ai-chat-window {
+      position: fixed;
+      bottom: 96px;
+      right: 24px;
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      height: 540px;
+      max-height: calc(100vh - 120px);
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 1px solid #e2e8f0;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+      animation: slideUp 0.25s ease-out;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .ai-chat-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #fff;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ai-chat-header-info h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ai-chat-header-info p {
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+    .ai-close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .ai-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+    .msg.bot {
+      background: #ffffff;
+      color: #1e293b;
+      align-self: flex-start;
+      border: 1px solid #e2e8f0;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+    .msg.user {
+      background: #10b981;
+      color: #ffffff;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .ai-chat-footer {
+      padding: 12px;
+      background: #fff;
+      border-top: 1px solid #e2e8f0;
+    }
+    .ai-chat-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .ai-chat-input-row input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: 1px solid #cbd5e1;
+      outline: none;
+      font-size: 0.88rem;
+    }
+    .ai-chat-input-row input:focus {
+      border-color: #10b981;
+    }
+    .ai-send-btn {
+      background: #10b981;
+      color: #fff;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    footer {
+      background: var(--primary);
+      color: #94a3b8;
+      padding: 40px 24px 20px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    /* Mobile Responsive View */
+    @media (max-width: 768px) {
+      .top-bar {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        flex-direction: column;
+        text-align: center;
+      }
+      .nav-container {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .nav-container nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+      .hero {
+        padding: 40px 16px;
+      }
+      .hero h2 {
+        font-size: 2rem;
+      }
+      .container {
+        padding: 24px 12px;
+      }
+      .ai-chat-window {
+        width: 100%;
+        max-width: 100vw;
+        right: 0;
+        bottom: 0;
+        height: 85vh;
+        max-height: 85vh;
+        border-radius: 20px 20px 0 0;
+      }
+      .ai-fab {
+        bottom: 16px;
+        right: 16px;
+        width: 52px;
+        height: 52px;
+        font-size: 22px;
+      }
+    }
+
+    /* Original Website (seemaanantom-eng.github.io/NJSpublicSchool) Styles */
+    #njs-banner-section {
+      width: 100%;
+      min-height: 240px;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 35px 20px;
+      border-radius: 20px;
+      margin: 30px 0 20px;
+    }
+    .njs-glass-card {
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 20px;
+      padding: 35px 30px;
+      text-align: center;
+      box-shadow: 0 12px 35px 0 rgba(0, 0, 0, 0.25);
+      max-width: 800px;
+      width: 100%;
+    }
+    .njs-school-name {
+      font-family: 'Playfair Display', serif;
+      color: #ffffff;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: 1.5px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.35);
+    }
+    .njs-tagline {
+      color: #f0f4f8;
+      font-size: 1rem;
+      font-weight: 300;
+      margin-top: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .njs-stabilizer-bar {
+      height: 4px;
+      background: #ffcc00;
+      margin: 18px auto 0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+      width: 60%;
+    }
+    .creator-container {
+      text-align: center;
+      margin: 25px 0 10px;
+    }
+    .knowledge-creator {
+      font-family: 'Georgia', serif;
+      font-size: 1.8rem;
+      font-weight: bold;
+      font-style: italic;
+      letter-spacing: 1.5px;
+      background: linear-gradient(to right, #2c3e50, #4ca1af);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+      border-bottom: 2px solid #4ca1af;
+      padding-bottom: 5px;
+    }
+    #apple {
+      display: block;
+      margin: 16px auto;
+      max-width: 140px;
+      height: auto;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      border: 3px solid #fff;
+    }
+    .stabilizer-text {
+      max-width: 860px;
+      margin: 20px auto;
+      padding: 20px 24px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      border-left: 5px solid #2c3e50;
+      background-color: #f9fbfb;
+      border-radius: 0 12px 12px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      color: #334155;
+    }
+    .stabilizer-text strong {
+      color: #e74c3c;
+    }
+    .sf-project-wrapper {
+      display: block;
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 16px;
+      margin: 2rem auto;
+      overflow: hidden;
+      max-width: 880px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    }
+    .sf-project-banner {
+      background-color: #065f46;
+      color: white;
+      padding: 1.4rem 2rem;
+      text-align: center;
+    }
+    .sf-project-banner h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .sf-project-body {
+      padding: 1.8rem 2rem;
+      color: #374151;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+    .sf-project-highlight {
+      font-weight: 700;
+      color: #065f46;
+      border-bottom: 2px solid #34d399;
+    }
+    .sf-project-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 1rem 2rem 1.8rem;
+      gap: 10px;
+    }
+    .sf-feature-tag {
+      background: #ecfdf5;
+      color: #065f46;
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1px solid #a7f3d0;
+    }
+    #noni {
+      display: block;
+      margin: 2rem auto;
+      max-width: 440px;
+      width: 90%;
+      height: auto;
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      border: 3px solid #fff;
+    }
+    .trip-module {
+      display: block;
+      max-width: 880px;
+      margin: 30px auto;
+      background: #ffffff;
+      border-top: 6px solid #d4af37;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      border-radius: 0 0 16px 16px;
+      overflow: hidden;
+    }
+    .trip-header {
+      background: #5d4037;
+      color: #ffffff;
+      padding: 20px;
+      text-align: center;
+    }
+    .trip-header h2 {
+      margin: 0;
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+    }
+    .trip-content {
+      padding: 24px;
+      line-height: 1.8;
+      color: #334155;
+      text-align: justify;
+      font-size: 1rem;
+    }
+    .trip-highlight {
+      color: #8d6e63;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+    .facilities-bar {
+      background: #f9f5f0;
+      padding: 14px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 10px;
+      border-top: 1px solid #e7ded5;
+    }
+    .facility-item {
+      font-size: 0.9rem;
+      color: #5d4037;
+      font-weight: 700;
+    }
+    .activity-block {
+      display: block;
+      max-width: 900px;
+      margin: 35px auto;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+    .activity-banner {
+      background: linear-gradient(to right, #6366f1, #a855f7);
+      color: white;
+      padding: 22px 20px;
+      text-align: center;
+    }
+    .activity-banner h2 {
+      margin: 0;
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .activity-text {
+      padding: 26px;
+      color: #4b5563;
+      line-height: 1.85;
+      font-size: 1.05rem;
+      text-align: justify;
+    }
+    .activity-text b {
+      color: #4f46e5;
+    }
+    .activity-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      padding: 18px;
+      background-color: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+    }
+    .activity-tag {
+      background: #e0e7ff;
+      color: #4338ca;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .photo-gallery-section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: 30px auto;
+      border-radius: 20px;
+      background-color: #7fffd4;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+    .gallery-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .gallery-header h2 {
+      font-size: 2rem;
+      color: #1e293b;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .gallery-header p {
+      color: #334155;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+    .header-line {
+      width: 50px;
+      height: 4px;
+      background-color: #0984e3;
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .photo-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      height: 220px;
+    }
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .slider-stage-box {
+      max-width: 900px;
+      margin: 30px auto;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    }
+  </style>
+<script src="/_aistudio-iframe.js?v=1f94f900"></script><script src="https://cdn.jsdelivr.net/npm/html2canvas-pro@2.0.4"></script><style>.aistudio-hover-highlight { box-shadow: inset 0 0 0 0.5px white, inset 0 0 0 1.5px rgba(128,128,128,0.6) !important; }.aistudio-active-highlight { outline: 2px solid #87a9ff !important; outline-offset: -2px !important; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.3), inset 0 0 0 0.5px rgba(0,0,0,0.3) !important; }.aistudio-generating-blur { filter: blur(5px) grayscale(100%) brightness(28%) !important; transition: filter 0.3s ease; }#aistudio-focus-mode-tag { position: absolute; display: none; align-items: center; gap: 4px; background: #87a9ff; border-radius: 12px; z-index: 10000; padding: 8px; color: #32302c; font-family: Inter, sans-serif; font-size: 14px; font-style: normal; font-weight: 500; line-height: 21px; pointer-events: none; }#aistudio-hover-mode-tag { position: absolute; display: none; align-items: center; gap: 4px; background: rgba(128,128,128,0.6); border-radius: 12px; z-index: 10000; padding: 8px; color: white; font-family: Inter, sans-serif; font-size: 14px; font-style: normal; font-weight: 500; line-height: 21px; pointer-events: none; }.aistudio-img-icon { display: none; vertical-align: middle; pointer-events: auto; cursor: pointer; }.aistudio-img-icon.visible { display: inline-flex; }#aistudio-focus-mode-tag .aistudio-img-icon { position: relative; width: 26px; height: 26px; background: #32302c; border-radius: 6px; margin: -4px -4px -4px 0; }#aistudio-focus-mode-tag .aistudio-img-icon::before { content: ""; position: absolute; top: 4px; left: 4px; width: 18px; height: 18px; background-color: white; -webkit-mask-image: url("https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/edit_fix_auto/default/24px.svg"); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; mask-image: url("https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/edit_fix_auto/default/24px.svg"); mask-size: contain; mask-repeat: no-repeat; }#aistudio-hover-mode-tag .aistudio-img-icon { position: relative; width: 18px; height: 18px; margin-left: 4px; }#aistudio-hover-mode-tag .aistudio-img-icon::before { content: ""; position: absolute; top: 0; left: 0; width: 18px; height: 18px; background-color: white; -webkit-mask-image: url("https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/edit_fix_auto/default/24px.svg"); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; mask-image: url("https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/edit_fix_auto/default/24px.svg"); mask-size: contain; mask-repeat: no-repeat; }#aistudio-focus-mode-tag .aistudio-img-icon:hover, #aistudio-hover-mode-tag .aistudio-img-icon:hover { background: #424242 !important; }#aistudio-focus-mode-tag .aistudio-img-icon:active, #aistudio-hover-mode-tag .aistudio-img-icon:active { background: #393f51 !important; }</style></head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div>
+      📢 <strong>NJS Public School Portal</strong> • <a href="mailto:seemaanantom@gmail.com">seemaanantom@gmail.com</a>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button onclick="downloadHtmlFile()" style="background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.35); padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Download complete standalone HTML file">
+        📥 Download HTML
+      </button>
+      <span class="ai-badge" onclick="toggleAiDrawer()">🤖 AI सहायता (Holo Mode)</span>
+      <a href="https://www.youtube.com/@anantgahlaut" target="_blank" class="yt-badge">
+        ▶ YouTube @anantgahlaut
+      </a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo-area">
+        <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/apple.jpg" class="logo-img" alt="NJS School Logo">
+        <div class="logo-text">
+          <h1>NJS PUBLIC SCHOOL</h1>
+          <p>Creator of Knowledge</p>
+        </div>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#notices">Notices</a></li>
+          <li><a href="#youtube">YouTube</a></li>
+          <li><a href="#sports">Sports</a></li>
+          <li>
+            <button onclick="downloadHtmlFile()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; padding: 7px 15px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(37,99,235,0.35);" title="Download full HTML code of NJS Public School Portal">
+              <span>📥 Download HTML</span>
+            </button>
+          </li>
+          <li>
+            <button class="btn-ai-nav" onclick="toggleAiDrawer()">
+              <span>✨ Ask AI Assistant</span>
+            </button>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@anantgahlaut" target="_blank" class="btn-yt">
+              <span>@anantgahlaut</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="about">
+    <div class="hero-tag">✨ Creator of Knowledge • AI Enabled Campus</div>
+    <h2>NJS Public School</h2>
+    <p>
+      Excellence in Education, Character Building &amp; Innovation. With dedicated school AI assistance for parents, students, and teachers.
+    </p>
+    <div class="hero-buttons">
+      <button class="btn-primary" onclick="toggleAiDrawer()">
+        <span>🤖 Open School AI Assistant</span>
+      </button>
+      <a href="#notices" class="btn-secondary">
+        <span>📜 View Circulars &amp; Holidays</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Embedded AI School Assistant Section (AI in HTML code) -->
+    <section class="ai-banner-section" id="ai-hub">
+      <div class="ai-banner-header">
+        <div class="ai-banner-title">
+          <h3>🤖 AI School Assistant (हिंदी / Hinglish / English)</h3>
+          <p>अभिभावक (Parents) और विद्यार्थी (Students) छुट्टियों, परीक्षा व नोटिस की तुरंत पुष्टि कर सकते हैं</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <span style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">
+            ⚡ Gemini 3.8 Flash Powered
+          </span>
+          <button onclick="openNoticeModal()" style="background: #4f46e5; color: #fff; border: none; padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+            ➕ Notice Manager
+          </button>
+        </div>
+      </div>
+
+      <div class="ai-quick-inputs" style="position: relative;">
+        <div style="flex: 1; position: relative; display: flex; align-items: center;">
+          <input type="text" id="embedded-ai-input" placeholder="Type or click mic to speak (उदा. 'कल छुट्टी है क्या?', 'Is school open tomorrow?')..." onkeydown="if(event.key==='Enter') sendEmbeddedQuery()" style="width: 100%; padding-right: 50px;">
+          <button id="embedded-mic-btn" type="button" class="mic-btn" onclick="toggleVoiceInput('embedded')" title="बोलकर पूछें (Click to Speak / Voice Search)" style="position: absolute; right: 8px;">
+            🎤
+          </button>
+        </div>
+        <button onclick="sendEmbeddedQuery()" style="white-space: nowrap;">
+          <span>Ask AI</span>
+        </button>
+      </div>
+
+      <!-- Voice Status Banner -->
+      <div id="embedded-voice-status" style="display: none; align-items: center; gap: 8px; font-size: 0.82rem; color: #f87171; margin: -10px 0 16px 6px; font-weight: 600;">
+        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ef4444; animation: pulseMic 1.2s infinite;"></span>
+        <span id="embedded-voice-status-text">🎙️ सुन रहा हूँ... बोलिए (Listening, speak now...)</span>
+      </div>
+
+      <!-- Quick Preset Buttons -->
+      <div class="ai-preset-chips">
+        <div class="ai-chip" onclick="handlePreset('Kal holiday hai kya?')">📅 "Kal holiday hai kya?"</div>
+        <div class="ai-chip" onclick="handlePreset('Is school open tomorrow?')">🏫 "Is school open tomorrow?"</div>
+        <div class="ai-chip" onclick="openNoticeModal()" style="border-color: rgba(99, 102, 241, 0.6); color: #a5b4fc; font-weight: bold;">➕ "Add Notice (नोटिस जोड़ें)"</div>
+        <div class="ai-chip" onclick="handlePreset('क्या कोई नया नोटिस आया है?')">📢 "क्या कोई नया नोटिस आया है?"</div>
+        <div class="ai-chip" onclick="handlePreset('Hastinapur excursion trip kab hai?')">🚌 "Hastinapur trip details"</div>
+      </div>
+
+      <div class="ai-response-box" id="embedded-ai-response">
+        <div id="ai-response-content">🏫 School is OPEN (स्कूल खुला है)!<br><br>• Hindi: स्कूल खुला है (School is OPEN)! रिकॉर्ड में किसी भी छुट्टी (Holiday) या अवकाश का नोटिस नहीं है। सभी कक्षाएं अपने निर्धारित समय पर चलेंगी।<br><br>• English: School is OPEN (स्कूल खुला है)! No holiday or leave notice is present in the database. All classes will run as per normal regular schedule.</div>
+      </div>
+    </section>
+
+    <!-- YouTube Banner -->
+    <section class="yt-section" id="youtube">
+      <div class="yt-header">
+        <div>
+          <h3>Official YouTube Channel: @anantgahlaut</h3>
+          <p>वार्षिक उत्सव, 400m स्पोर्ट्स रेस, सांस्कृतिक कार्यक्रम व व्याख्यान देखें</p>
+        </div>
+        <a href="https://www.youtube.com/@anantgahlaut" target="_blank" class="btn-subscribe">
+          ▶ Subscribe @anantgahlaut
+        </a>
+      </div>
+    </section>
+
+    <!-- Official Notices Board Section -->
+    <section class="notices-section" id="notices">
+      <div class="notices-header">
+        <div>
+          <h3>📜 Active School Notices &amp; Circulars</h3>
+          <p style="color: #64748b; font-size: 0.88rem;">Official announcements verified by NJS School Administration</p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button onclick="openNoticeModal()" style="background: #4f46e5; color: #fff; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.82rem;">
+            ➕ Add Notification (Admin)
+          </button>
+          <button onclick="clearAllNotices()" style="background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.82rem;">
+            🗑️ Clear All (सभी हटाएं)
+          </button>
+          <button onclick="askHoliday()" style="background: #0f172a; color: #fff; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.82rem;">
+            🏫 Holiday Status
+          </button>
+        </div>
+      </div>
+
+      <div id="notices-container">
+          <div style="padding: 24px; text-align: center; color: #94a3b8; font-size: 0.88rem;">
+            No active notices at this time. (School is OPEN / स्कूल खुला है!)<br>
+            <button onclick="openNoticeModal()" style="margin-top: 10px; background: #4f46e5; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+              ➕ Add Notice
+            </button>
+          </div>
+        </div>
+
+      <!-- 🧪 Test Image at Bottom of Notice Box -->
+      <div id="notice-box-test-image-card" style="margin-top: 18px; padding: 16px; border-radius: 16px; background: linear-gradient(135deg, #eef2ff 0%, #fffbeb 50%, #f8fafc 100%); border: 2px dashed #c7d2fe; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="background: #4f46e5; color: #fff; font-size: 0.7rem; font-weight: 800; padding: 3px 9px; border-radius: 12px; text-transform: uppercase;">
+                🧪 Notice Box Test Image
+              </span>
+              <span style="background: #d1fae5; color: #065f46; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; border: 1px solid #a7f3d0;">
+                ✓ Verified Test Notice Graphic
+              </span>
+              <span style="font-size: 0.72rem; color: #64748b;">(सूचना पट्ट परीक्षण छवि)</span>
+            </div>
+            <h5 id="html-notice-box-caption" style="margin: 6px 0 0; font-size: 0.95rem; font-weight: 700; color: #0f172a;">
+              Annual 400m Olympic Track Sprint &amp; Athletics Circular Preview
+            </h5>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button onclick="openHtmlTestImageModal()" style="background: #f59e0b; color: #0f172a; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer;">
+              🔒 Upload Test Image (Admin)
+            </button>
+            <button onclick="enlargeNoticeBoxTestImage()" style="background: #fff; color: #334155; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 0.75rem; cursor: pointer;">
+              🔍 Enlarge
+            </button>
+          </div>
+        </div>
+
+        <div style="position: relative; border-radius: 12px; overflow: hidden; background: #020617; max-height: 320px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer;" onclick="enlargeNoticeBoxTestImage()">
+          <img id="html-notice-box-test-img" src="https://seemaanantom-eng.github.io/NJSpublicSchool/race.jpg" alt="Notice Box Test Graphic" style="width: 100%; height: 260px; object-fit: cover; display: block;">
+          <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(15,23,42,0.85)); color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <span style="font-size: 0.78rem; font-weight: 600; color: #e2e8f0;">NJS Public School Notice Board Test Graphic</span>
+            <span style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); padding: 4px 10px; border-radius: 8px; font-size: 0.72rem; font-weight: 700;">🔍 Click to Zoom</span>
+          </div>
+        </div>
+
+        <!-- Quick Presets -->
+        <div style="margin-top: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+          <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Quick Test Presets:</span>
+          <button onclick="setHtmlNoticeBoxPreset('https://seemaanantom-eng.github.io/NJSpublicSchool/race.jpg', '400m Olympic Track Sprint &amp; Athletics Circular Preview')" style="background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer;">🏃 400m Track</button>
+          <button onclick="setHtmlNoticeBoxPreset('https://seemaanantom-eng.github.io/NJSpublicSchool/group.jpg', 'NJS Public School Faculty &amp; Student Council Bulletin')" style="background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer;">👥 Campus Council</button>
+          <button onclick="setHtmlNoticeBoxPreset('https://seemaanantom-eng.github.io/NJSpublicSchool/havan.jpg', 'Vedic Havan Ceremony &amp; Annual Moral Values Circular')" style="background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer;">🔥 Havan Ceremony</button>
+          <button onclick="setHtmlNoticeBoxPreset('https://seemaanantom-eng.github.io/NJSpublicSchool/cricket.jpg', 'Inter-School Cricket Championship &amp; Sports Fixtures')" style="background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer;">🏏 Cricket Match</button>
+          <button onclick="setHtmlNoticeBoxPreset('https://seemaanantom-eng.github.io/NJSpublicSchool/tree.jpg', 'NJS Public School Green Campus Environment Week Bulletin')" style="background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer;">🌳 Campus View</button>
+        </div>
+      </div>
+
+      <!-- Image Display at Bottom of School Circulars & Notifications -->
+      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+          <div>
+            <span style="display: inline-block; background: #e0e7ff; color: #4338ca; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase;">
+              📌 Campus Circulars &amp; Bulletin Board
+            </span>
+            <h4 style="margin: 4px 0 0; font-size: 1.05rem; color: #0f172a;">School Circulars, Sports Schedules &amp; Campus Bulletin</h4>
+          </div>
+          <button onclick="openHtmlTestImageModal()" style="background: #f59e0b; color: #0f172a; border: none; padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.78rem; cursor: pointer;">
+            🔒 Update Board Image (Admin)
+          </button>
+        </div>
+        <div style="position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.12); background: #090d16; border: 1px solid #e2e8f0;">
+          <img id="html-notice-board-img" src="https://seemaanantom-eng.github.io/NJSpublicSchool/group.jpg" alt="NJS Campus Notice Board &amp; Circulars" style="width: 100%; height: 320px; object-fit: cover; display: block;">
+          <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(15,23,42,0.92)); color: #fff; padding: 18px 20px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+              <span style="background: #10b981; color: #000; font-size: 0.65rem; font-weight: 800; padding: 2px 7px; border-radius: 12px; text-transform: uppercase;">
+                Verified Campus Bulletin
+              </span>
+              <span style="font-size: 0.75rem; color: #cbd5e1;">NJS Public School • Creator of Knowledge</span>
+            </div>
+            <p style="margin: 0; font-size: 0.82rem; color: #f1f5f9; line-height: 1.4;">
+              Official notice board displaying student circulars, 400m Olympic athletics timetables, holiday announcements, and admissions bulletins.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pillars of Education -->
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <h4>🏛️ Hastinapur Excursion</h4>
+        <p>Curated educational trips to historic Hastinapur antiquities (Kuru Empire &amp; sacred Jain temples) with 24/7 faculty supervision and buffet meals.</p>
+      </div>
+      <div class="pillar-card" id="sports">
+        <h4>🏃 400m Olympic-Grade Track</h4>
+        <p>Full-sized athletics facilities including 400-meter all-weather track, basketball courts, and FIFA-standard turf for athletics trials.</p>
+      </div>
+      <div class="pillar-card">
+        <h4>🏺 Clay Sculpting &amp; Pottery</h4>
+        <p>Tactile ceramic and pottery workshops using terracotta and stoneware clay for creative fine arts expression.</p>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- DIRECT CONTENT FROM https://seemaanantom-eng.github.io/NJSpublicSchool/    -->
+    <!-- ========================================================================= -->
+    <section id="official-original-content" style="margin-top: 50px; padding-top: 40px; border-top: 2px solid #e2e8f0;">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <span style="background: #0f172a; color: #34d399; font-family: monospace; font-size: 0.75rem; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; font-weight: 700;">
+          Official Campus Archives • seemaanantom-eng.github.io/NJSpublicSchool
+        </span>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #0f172a; margin-top: 12px; font-weight: 800;">
+          NJS Public School Campus Infrastructure &amp; Activities
+        </h2>
+        <p style="color: #64748b; font-size: 0.95rem; max-width: 650px; margin: 6px auto 0;">
+          Direct website content: architectural stabilizers, sports infrastructure, Hastinapur excursions, and student achievements.
+        </p>
+      </div>
+
+      <!-- 1. NJS Glass Banner -->
+      <div id="njs-banner-section">
+        <div class="njs-glass-card">
+          <h1 class="njs-school-name">NJS Public School</h1>
+          <p class="njs-tagline">Excellence in Education &amp; Innovation</p>
+          <div class="njs-stabilizer-bar"></div>
+        </div>
+      </div>
+
+      <!-- 2. Creator container & Emblem -->
+      <div class="creator-container">
+        <p class="knowledge-creator">Creator of Knowledge</p>
+      </div>
+      <img id="apple" src="https://seemaanantom-eng.github.io/NJSpublicSchool/apple.jpg" alt="NJS Public School Apple Emblem">
+
+      <!-- 3. Stabilizer Architecture Text -->
+      <p class="stabilizer-text">
+        In the architectural and structural design of a school building, the <strong>stabilizer</strong> refers to the core elements that ensure the safety and longevity of the facility against physical stresses. This typically involves a combination of reinforced concrete shear walls and a robust foundation system designed to resist lateral forces like high winds or seismic activity.
+      </p>
+
+      <!-- 4. Mega Slider 1: Life at NJS Public School -->
+      <div class="slider-stage-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #0f172a; margin: 0;">Life at NJS Public School</h3>
+          <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;" id="mega1-counter">1 of 5</span>
+        </div>
+        <div style="position: relative; overflow: hidden; border-radius: 14px; background: #000; height: 380px;">
+          <div id="mega1-slides">
+            <div class="mega1-slide" style="display: block; position: relative; height: 100%;">
+              <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/havan.jpg" alt="Event 1 - Havan Ceremony" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; padding: 20px;">
+                <h4 style="margin: 0 0 4px; font-size: 1.15rem; color: #38bdf8;">Havan &amp; Moral Values</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0;">Inaugural Vedic ceremonies fostering ancient wisdom, ethics, and mindful dedication.</p>
+              </div>
+            </div>
+            <div class="mega1-slide" style="display: none; position: relative; height: 100%;">
+              <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/master.jpg" alt="Event 2 - Faculty Mentorship" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; padding: 20px;">
+                <h4 style="margin: 0 0 4px; font-size: 1.15rem; color: #38bdf8;">Academic Mentorship</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0;">Experienced educators guiding students in interactive and inspiring classroom environments.</p>
+              </div>
+            </div>
+            <div class="mega1-slide" style="display: none; position: relative; height: 100%;">
+              <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/race.jpg" alt="Event 3 - 400m Track Athletic Race" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; padding: 20px;">
+                <h4 style="margin: 0 0 4px; font-size: 1.15rem; color: #38bdf8;">400m Olympic Track Sprint</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0;">Annual athletics championships with sprint heats, relay races, and field events.</p>
+              </div>
+            </div>
+            <div class="mega1-slide" style="display: none; position: relative; height: 100%;">
+              <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/cricket.jpg" alt="Event 4 - Cricket Championship" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; padding: 20px;">
+                <h4 style="margin: 0 0 4px; font-size: 1.15rem; color: #38bdf8;">Cricket Academy &amp; Matches</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0;">Turf pitch cricket tournaments teaching sportsmanship, leadership, and athletic vigor.</p>
+              </div>
+            </div>
+            <div class="mega1-slide" style="display: none; position: relative; height: 100%;">
+              <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/football.jpg" alt="Event 5 - Football Tournament" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; padding: 20px;">
+                <h4 style="margin: 0 0 4px; font-size: 1.15rem; color: #38bdf8;">Football League &amp; Training</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0;">Floodlit football turf hosting inter-school leagues and tactical physical endurance sessions.</p>
+              </div>
+            </div>
+          </div>
+          <button onclick="moveMega1Slide(-1)" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: #fff; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 5;">❮</button>
+          <button onclick="moveMega1Slide(1)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: #fff; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 5;">❯</button>
+        </div>
+      </div>
+
+      <!-- 5. Campus Sports Infrastructure -->
+      <div class="sf-project-wrapper">
+        <div class="sf-project-banner">
+          <h2>Campus Sports Infrastructure</h2>
+        </div>
+        <div class="sf-project-body">
+          <p>
+            The newly developed athletic complex at <strong>NJS Public School</strong> features state-of-the-art facilities designed to foster physical wellness and competitive spirit. Centered around a regulation <span class="sf-project-highlight">400m Olympic Track</span>, the grounds accommodate track and field events, soccer, and physical conditioning modules.
+          </p>
+          <img id="noni" src="https://seemaanantom-eng.github.io/NJSpublicSchool/group.jpg" alt="NJS Public School Sports Gathering">
+        </div>
+        <div class="sf-project-features">
+          <span class="sf-feature-tag">400m All-Weather Track</span>
+          <span class="sf-feature-tag">Olympic Pool</span>
+          <span class="sf-feature-tag">Fitness Lab</span>
+          <span class="sf-feature-tag">Basketball Courts</span>
+          <span class="sf-feature-tag">Turf Football Pitch</span>
+        </div>
+      </div>
+
+      <!-- 6. Educational Excursion: Hastinapur -->
+      <div class="trip-module">
+        <div class="trip-header">
+          <h2>Educational Excursion: Hastinapur</h2>
+        </div>
+        <div class="trip-content">
+          The annual senior historical field trip to <span class="trip-highlight">Hastinapur</span> offers students a hands-on exploration of ancient Indian history and architectural heritage. Students explore historical sites, Jain temples, and wildlife sanctuaries under experienced faculty guidance with full safety protocols and buffet refreshments.
+        </div>
+        <div class="facilities-bar">
+          <span class="facility-item">Guided Archaeology Tour</span>
+          <span class="facility-item">24/7 First Aid Staff</span>
+          <span class="facility-item">AC Transit Buses</span>
+          <span class="facility-item">Buffet Lunch</span>
+        </div>
+      </div>
+
+      <!-- 7. Mega Slider 2: Our Achievements -->
+      <div class="slider-stage-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #0f172a; margin: 0;">Our Achievements &amp; Arts</h3>
+          <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;" id="mega2-counter">1 of 4</span>
+        </div>
+        <div style="position: relative; overflow: hidden; border-radius: 14px; background: #000; height: 380px;">
+          <div id="mega2-slides">
+            <div class="mega2-slide" style="display: block; position: relative; height: 100%;">
+              <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/clay.jpg" alt="Award 1 - Clay Sculpting" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; padding: 20px;">
+                <h4 style="margin: 0 0 4px; font-size: 1.15rem; color: #f59e0b;">Terracotta &amp; Clay Sculpting</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0;">Fine arts accolades and student pottery exhibitions.</p>
+              </div>
+            </div>
+            <div class="mega2-slide" style="display: none; position: relative; height: 100%;">
+              <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/rakhi.jpg" alt="Award 2 - Rakhi Celebrations" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; padding: 20px;">
+                <h4 style="margin: 0 0 4px; font-size: 1.15rem; color: #f59e0b;">Cultural Festivals &amp; Rakhi</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0;">Traditional Indian festivals celebrated with artistic craftsmanship.</p>
+              </div>
+            </div>
+            <div class="mega2-slide" style="display: none; position: relative; height: 100%;">
+              <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/diwali.jpg" alt="Award 3 - Diwali Illuminations" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; padding: 20px;">
+                <h4 style="margin: 0 0 4px; font-size: 1.15rem; color: #f59e0b;">Diwali Festivities &amp; Arts</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0;">Eco-friendly celebrations, rangoli competitions, and community service.</p>
+              </div>
+            </div>
+            <div class="mega2-slide" style="display: none; position: relative; height: 100%;">
+              <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/arth.jpg" alt="Award 4 - Artistic Exhibitions" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; padding: 20px;">
+                <h4 style="margin: 0 0 4px; font-size: 1.15rem; color: #f59e0b;">Artistic Excellence &amp; Earth Day</h4>
+                <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0;">Environmental conservation projects and student art galleries.</p>
+              </div>
+            </div>
+          </div>
+          <button onclick="moveMega2Slide(-1)" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: #fff; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 5;">❮</button>
+          <button onclick="moveMega2Slide(1)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: #fff; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 5;">❯</button>
+        </div>
+      </div>
+
+      <!-- 8. Creative & Extra-Curricular Life -->
+      <article class="activity-block">
+        <header class="activity-banner">
+          <h2>Creative &amp; Extra-Curricular Life</h2>
+        </header>
+        <div class="activity-text">
+          The school’s commitment to a well-rounded education is best seen through our immersive <b>clay activities</b> and diverse club offerings. In our pottery workshops, students engage in the meditative practice of sculpting, using high-quality terracotta and stoneware clay to bring their imaginations to life. This tactile experience is complemented by a wide array of <b>other activities</b>, ranging from high-energy sports tournaments to intellectual debates and cultural festivals. By participating in these programs, students learn to step outside their comfort zones, fostering a spirit of innovation and resilience.
+        </div>
+        <footer class="activity-footer">
+          <span class="activity-tag">Pottery &amp; Ceramics</span>
+          <span class="activity-tag">Robotics Lab</span>
+          <span class="activity-tag">Drama Society</span>
+          <span class="activity-tag">Music Academy</span>
+          <span class="activity-tag">Eco-Warriors</span>
+        </footer>
+      </article>
+
+      <!-- 9. Photo Gallery Section (with Test Any Image capability) -->
+      <section class="photo-gallery-section" id="community-gallery">
+        <div class="gallery-header">
+          <h2>Our Community &amp; Campus Moments</h2>
+          <p>Capturing the moments that define our journey together.</p>
+          <div class="header-line"></div>
+
+          <div style="margin-top: 16px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center;">
+            <button onclick="openHtmlTestImageModal()" style="background: #0f172a; color: #fde047; font-weight: 700; border: 1.5px solid #fde047; padding: 9px 18px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+              <span>🧪</span> Add Any Image for Test (छवि जोड़ें)
+            </button>
+            <button onclick="resetHtmlGallery()" id="html-reset-gallery-btn" style="display: none; background: #ffffff; color: #475569; font-weight: 600; border: 1px solid #cbd5e1; padding: 9px 14px; border-radius: 12px; cursor: pointer; font-size: 0.82rem;">
+              🔄 Reset to Defaults
+            </button>
+            <span id="html-gallery-count" style="font-size: 0.8rem; color: #334155; font-weight: 600; background: rgba(255,255,255,0.7); padding: 6px 12px; border-radius: 20px;">3 Photos </span>
+          </div>
+        </div>
+        <div class="photo-grid" id="html-photo-grid"><div class="photo-item" style="position: relative;">
+          
+          
+          <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/akshu.jpg" alt="Team Workshop &amp; Mentorship">
+          <div class="photo-overlay">
+            <div>
+              <span style="font-weight: 700; color: #fff; font-size: 0.95rem; display: block;">Team Workshop &amp; Mentorship</span>
+              <span style="font-size: 0.75rem; color: #cbd5e1; display: block; margin-top: 2px;">Interactive learning and faculty guidance</span>
+              <button onclick="event.stopPropagation(); setAsHtmlNoticeBoxTestImage('https://seemaanantom-eng.github.io/NJSpublicSchool/akshu.jpg', 'Team Workshop &amp; Mentorship')" style="margin-top: 6px; background: #f59e0b; color: #0f172a; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.72rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Make this image the Notice Box Test Image">
+                🧪 Make Notice Box Test Image
+              </button>
+            </div>
+          </div>
+        </div><div class="photo-item tall" style="position: relative;">
+          
+          
+          <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/yash.jpg" alt="Summer Outing &amp; Excursions">
+          <div class="photo-overlay">
+            <div>
+              <span style="font-weight: 700; color: #fff; font-size: 0.95rem; display: block;">Summer Outing &amp; Excursions</span>
+              <span style="font-size: 0.75rem; color: #cbd5e1; display: block; margin-top: 2px;">Student field exploration</span>
+              <button onclick="event.stopPropagation(); setAsHtmlNoticeBoxTestImage('https://seemaanantom-eng.github.io/NJSpublicSchool/yash.jpg', 'Summer Outing &amp; Excursions')" style="margin-top: 6px; background: #f59e0b; color: #0f172a; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.72rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Make this image the Notice Box Test Image">
+                🧪 Make Notice Box Test Image
+              </button>
+            </div>
+          </div>
+        </div><div class="photo-item wide" style="position: relative;">
+          
+          
+          <img src="https://seemaanantom-eng.github.io/NJSpublicSchool/group.jpg" alt="Annual Gala 2026">
+          <div class="photo-overlay">
+            <div>
+              <span style="font-weight: 700; color: #fff; font-size: 0.95rem; display: block;">Annual Gala 2026</span>
+              <span style="font-size: 0.75rem; color: #cbd5e1; display: block; margin-top: 2px;">Felicitation and convocation</span>
+              <button onclick="event.stopPropagation(); setAsHtmlNoticeBoxTestImage('https://seemaanantom-eng.github.io/NJSpublicSchool/group.jpg', 'Annual Gala 2026')" style="margin-top: 6px; background: #f59e0b; color: #0f172a; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.72rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Make this image the Notice Box Test Image">
+                🧪 Make Notice Box Test Image
+              </button>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 10. Simple Footer from original site -->
+      <div style="background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 20px; text-align: center; margin-top: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+        <div style="font-weight: 800; font-size: 1.1rem; color: #0f172a; letter-spacing: 1px; font-family: 'Playfair Display', serif;">NJS PUBLIC SCHOOL</div>
+        <div style="margin: 8px 0; color: #64748b; font-size: 0.85rem; display: flex; justify-content: center; gap: 16px;">
+          <a href="#about" style="color: #4f46e5; text-decoration: none;">About</a>
+          <a href="#sports" style="color: #4f46e5; text-decoration: none;">Sports &amp; Track</a>
+          <a href="#notices" style="color: #4f46e5; text-decoration: none;">Notices &amp; Admissions</a>
+        </div>
+        <div style="color: #94a3b8; font-size: 0.8rem;">
+          © 2026 | <strong style="color: #059669;">Creator of Knowledge</strong>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Floating AI Chat Assistant FAB Button -->
+  <div class="ai-fab" onclick="toggleAiDrawer()" title="Ask School AI Assistant">
+    <span>🤖</span>
+    <span class="ai-fab-badge">AI</span>
+  </div>
+
+  <!-- Floating AI Chat Window -->
+  <div class="ai-chat-window" id="ai-chat-window">
+    <div class="ai-chat-header">
+      <div class="ai-chat-header-info">
+        <h4>🤖 NJS School AI सहायक</h4>
+        <p>English • Hinglish • Hindi (India)</p>
+      </div>
+      <button class="ai-close-btn" onclick="toggleAiDrawer()">✕</button>
+    </div>
+
+    <div class="ai-messages" id="chat-messages">
+      <div class="msg bot">
+        नमस्ते! <strong>NJS Public School</strong> AI सहायता में आपका स्वागत है।<br><br>
+        📌 <strong>Holiday &amp; Open Rule:</strong><br>
+        • यदि छुट्टी का नोटिस जोड़ा गया है, तो AI छुट्टी (Leave) की पुष्टि करेगा।<br>
+        • यदि कोई छुट्टी का नोटिस नहीं जोड़ा गया है, तो AI दोनों भाषाओं में स्पष्ट कहेगा कि <strong>School is OPEN (स्कूल खुला है)</strong>!<br><br>
+        अभिभावक व विद्यार्थी पूछ सकते हैं:<br>
+        • <em>"Kal holiday hai kya?"</em> या <em>"Is school open tomorrow?"</em><br>
+        • <em>"Koi naya notice aaya hai?"</em><br>
+        • <em>"Hastinapur excursion details?"</em>
+      </div>
+    </div>
+
+    <div class="ai-chat-footer">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; font-size: 0.72rem;">
+        <span style="color: #64748b;">NJS School AI Assistant</span>
+        <button onclick="openNoticeModal()" style="background: none; border: none; color: #4f46e5; font-weight: 700; cursor: pointer;">
+          ➕ Add Notice
+        </button>
+      </div>
+      <div class="ai-chat-input-row" style="position: relative; align-items: center;">
+        <input type="text" id="chat-input" placeholder="Type or click mic to speak..." onkeydown="if(event.key==='Enter') sendChatMessage()" style="padding-right: 42px;">
+        <button id="chat-mic-btn" type="button" class="mic-btn" onclick="toggleVoiceInput('chat')" title="बोलकर पूछें (Click to Speak)" style="position: absolute; right: 48px; width: 30px; height: 30px; font-size: 14px; background: none; border: none; color: #10b981;">
+          🎤
+        </button>
+        <button class="ai-send-btn" onclick="sendChatMessage()">➤</button>
+      </div>
+      <div id="chat-voice-status" style="display: none; font-size: 0.72rem; color: #ef4444; padding: 4px 6px 0; font-weight: 600;">
+        🔴 सुन रहा हूँ... बोलिए (Listening, speak now...)
+      </div>
+    </div>
+  </div>
+
+  <!-- Notice Modal for Adding Notices in HTML -->
+  <div id="html-notice-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center; padding: 16px;">
+    <div style="background: #fff; border-radius: 20px; max-width: 480px; width: 100%; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h4 style="margin: 0; font-size: 1.15rem; color: #0f172a;">📢 School Notice Manager</h4>
+        <button onclick="closeNoticeModal()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #64748b;">✕</button>
+      </div>
+
+      <div style="background: #fef3c7; border: 1px solid #fde68a; padding: 10px 14px; border-radius: 12px; font-size: 0.8rem; color: #92400e; margin-bottom: 16px; line-height: 1.5;">
+        <strong>📌 Holiday Rule:</strong> यदि आप छुट्टी का नोटिस जोड़ेंगे तो AI छुट्टी (Leave) बताएगा। यदि छुट्टी का नोटिस नहीं जोड़ा गया है, तो AI दोनों भाषाओं (Hindi और English) में कहेगा कि <b>School is OPEN (स्कूल खुला है)</b>!
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Title (शीर्षक)</label>
+          <input type="text" id="new-modal-title" placeholder="उदा. Heavy Rain Alert: Tomorrow School Closed" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.85rem;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Category (प्रकार)</label>
+            <select id="new-modal-cat" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.85rem;">
+              <option value="holiday">Holiday / छुट्टी (Leave)</option>
+              <option value="exam">Exam / परीक्षा</option>
+              <option value="event">Event / खेलकूद / टूर</option>
+              <option value="general">General / सामान्य</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Day / Date</label>
+            <input type="text" id="new-modal-date" value="Tomorrow / कल" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.85rem;">
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Notice Details (विवरण)</label>
+          <textarea id="new-modal-desc" rows="3" placeholder="उदा. भारी बारिश के कारण कल स्कूल में अवकाश घोषित किया गया है..." style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.85rem; font-family: inherit;"></textarea>
+        </div>
+
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 700; color: #b91c1c; display: block; margin-bottom: 4px;">🔐 Admin email (एडमिन ईमेल)</label>
+          <input type="email" id="new-modal-email" autocomplete="username" placeholder="Your admin email" style="width: 100%; padding: 10px 12px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 0.88rem; margin-bottom: 8px;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: #b91c1c; display: block; margin-bottom: 4px;">🔒 Admin password (Firebase Authentication)</label>
+          <div style="position: relative;">
+            <input type="password" id="new-modal-password" autocomplete="current-password" placeholder="Firebase admin password" style="width: 100%; padding: 10px 40px 10px 12px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 0.88rem; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#4f46e5'" onblur="this.style.borderColor='#cbd5e1'">
+            <button type="button" onclick="toggleNoticePasswordVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 0.9rem; color: #64748b;">👁️</button>
+          </div>
+          <div id="modal-password-error" style="display: none; color: #dc2626; font-size: 0.78rem; margin-top: 4px; font-weight: 600;"></div>
+        </div>
+
+        <button onclick="saveModalNotice()" style="background: #4f46e5; color: #fff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.9rem; margin-top: 6px;">
+          🚀 Publish Notification / Notice (नोटिफिकेशन जारी करें)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test Image Modal in Standalone HTML -->
+  <div id="html-test-image-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center; padding: 16px;">
+    <div style="background: #fff; border-radius: 20px; max-width: 520px; width: 100%; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+        <div>
+          <h4 style="margin: 0; font-size: 1.15rem; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+            <span>🧪 Add Any Image for Test</span>
+            <span style="background: #fef3c7; color: #92400e; font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; font-weight: 700;">SANDBOX</span>
+          </h4>
+          <p style="margin: 3px 0 0; font-size: 0.75rem; color: #64748b;">Upload any photo from your device or paste a URL to test the gallery.</p>
+        </div>
+        <button onclick="closeHtmlTestImageModal()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #64748b;">✕</button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <!-- File Upload -->
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Choose Image File (डिवाइस से चुनें)</label>
+          <input type="file" id="html-test-file-input" accept="image/*" onchange="handleHtmlImageFile(event)" style="width: 100%; padding: 8px; border: 1.5px dashed #cbd5e1; border-radius: 10px; font-size: 0.8rem; background: #f8fafc; cursor: pointer;">
+        </div>
+
+        <!-- URL Input -->
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">OR Paste Image URL (वेब लिंक)</label>
+          <input type="text" id="html-test-url-input" placeholder="https://images.unsplash.com/... or any photo URL" oninput="previewHtmlTestImage()" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.85rem;">
+        </div>
+
+        <!-- Quick 1-click presets -->
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 700; color: #64748b; display: block; margin-bottom: 6px;">Quick Sample Presets (नमूना छवियाँ):</label>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            <button type="button" onclick="setHtmlSampleImage('https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&amp;fit=crop&amp;w=800&amp;q=80', 'Science &amp; Robotics Lab', 'Physics &amp; Chemistry workstation trials')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer;">🔬 Science Lab</button>
+            <button type="button" onclick="setHtmlSampleImage('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&amp;fit=crop&amp;w=800&amp;q=80', '400m Olympic Track Sprint', 'Track and field athletics trials')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer;">🏃 400m Track</button>
+            <button type="button" onclick="setHtmlSampleImage('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&amp;fit=crop&amp;w=800&amp;q=80', 'Central Digital Library', 'Reference volumes &amp; research bays')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer;">📚 Smart Library</button>
+            <button type="button" onclick="setHtmlSampleImage('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&amp;fit=crop&amp;w=800&amp;q=80', 'AI &amp; Coding Lab', 'Computer programming &amp; algorithms')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer;">💻 AI Lab</button>
+          </div>
+        </div>
+
+        <!-- Title & Subtitle -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Photo Title</label>
+            <input type="text" id="html-test-title-input" placeholder="e.g. Science Exhibition" style="width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.82rem;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Caption / Subtitle</label>
+            <input type="text" id="html-test-sub-input" placeholder="e.g. Annual science project display" style="width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.82rem;">
+          </div>
+        </div>
+
+        <!-- Target Destination -->
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Where to Apply Image (छवि कहाँ लागू करें):</label>
+          <select id="html-test-target-select" style="width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.82rem; background: #fff;">
+            <option value="gallery">🖼️ Gallery Grid (Community photos)</option>
+            <option value="notice-board">📜 Notice Board (Bottom of Circulars)</option>
+            <option value="both">✨ Both Gallery &amp; Notice Board</option>
+          </select>
+        </div>
+
+        <!-- Live Preview -->
+        <div id="html-test-preview-box" style="display: none; border-radius: 12px; overflow: hidden; max-height: 180px; background: #090d16; text-align: center; border: 1px solid #cbd5e1; position: relative;">
+          <img id="html-test-preview-img" src="" alt="Test Preview" style="width: 100%; height: 180px; object-fit: cover;">
+          <span style="position: absolute; top: 8px; left: 8px; background: #f59e0b; color: #000; font-size: 0.68rem; font-weight: 800; padding: 2px 6px; border-radius: 20px;">🧪 TEST PREVIEW</span>
+        </div>
+
+        <!-- Admin Password Requirement -->
+        <div style="background: #fffbeb; border: 2px solid #fde68a; padding: 12px 14px; border-radius: 14px;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: #b45309; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+            🔒 Admin Password Required to Upload Image: *
+          </label>
+          <div style="position: relative;">
+            <input type="password" id="html-upload-password" placeholder="Enter private admin password..." style="width: 100%; padding: 10px 42px 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.85rem; font-family: monospace; outline: none; background: #fff;">
+            <button type="button" onclick="toggleHtmlUploadPasswordVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem; color: #64748b;">👁️</button>
+          </div>
+          <div id="html-upload-password-error" style="display: none; color: #dc2626; font-size: 0.78rem; margin-top: 5px; font-weight: 700;">
+            ❌ गलत पासवर्ड! केवल मान्य एडमिन पासवर्ड दर्ज करने पर ही छवि अपलोड की जा सकती है।
+          </div>
+          <div style="font-size: 0.72rem; color: #78716c; margin-top: 4px;">
+            Image uploads are password-protected to safeguard official school content.
+          </div>
+        </div>
+
+        <button onclick="addHtmlTestImageToGallery()" style="background: #f59e0b; color: #0f172a; border: none; padding: 12px; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 0.9rem; margin-top: 4px; box-shadow: 0 4px 12px rgba(245,158,11,0.3);">
+          🔒 Upload &amp; Apply Image (पासवर्ड से जोड़ें)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div style="max-width: 800px; margin: 0 auto 20px; padding: 16px 20px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 14px; text-align: center;">
+      <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
+        Official NJS Public School Web Repository
+      </div>
+      <a href="https://seemaanantom-eng.github.io/NJSpublicSchool/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-size: 1.1rem; font-weight: 700; text-decoration: underline; word-break: break-all;">
+        https://seemaanantom-eng.github.io/NJSpublicSchool/
+      </a>
+      <div style="color: #cbd5e1; font-size: 0.78rem; margin-top: 6px;">
+        Creator of Knowledge • Official School Portal &amp; Archives
+      </div>
+    </div>
+    <p>© 2026 NJS Public School • Official Link: <a href="https://seemaanantom-eng.github.io/NJSpublicSchool/" target="_blank">https://seemaanantom-eng.github.io/NJSpublicSchool/</a> • YouTube: <a href="https://www.youtube.com/@anantgahlaut" target="_blank">@anantgahlaut</a></p>
+  </footer>
+
+  <!-- Embedded AI Script (AI IN HTML CODE) -->
+  <script>
+    // =========================================================================
+    // Firebase configuration — paste the REAL values from Firebase Console.
+    // Do not use a password hard-coded in this HTML. Admin publishing uses Firebase Auth.
+    // =========================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyDLy9ZpmTumlAuWln-09Y8p7VtFTS7_2vE",
+      authDomain: "njs-public-school-23d8d.firebaseapp.com",
+      databaseURL: "https://njs-public-school-23d8d-default-rtdb.firebaseio.com",
+      projectId: "njs-public-school-23d8d",
+      storageBucket: "njs-public-school-23d8d.firebasestorage.app",
+      messagingSenderId: "186798198777",
+      appId: "1:186798198777:web:a39551fb4244c2f7613728",
+      measurementId: "G-R7LCRJPSMH"
+    };
+
+    let database = null;
+    let noticesRef = null;
+    let auth = null;
+    let firebaseReady = false;
+    let localNotices = [];
+
+    function isFirebaseConfigured() {
+      return firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('PASTE_') &&
+        firebaseConfig.projectId && !firebaseConfig.projectId.startsWith('PASTE_') &&
+        firebaseConfig.databaseURL && !firebaseConfig.databaseURL.startsWith('PASTE_');
+    }
+
+    try {
+      if (typeof firebase !== 'undefined' && isFirebaseConfigured()) {
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        database = firebase.database();
+        auth = firebase.auth();
+        noticesRef = database.ref('notices');
+        firebaseReady = true;
+      } else {
+        console.warn('Firebase is not configured yet. Follow the included Firebase setup guide.');
+      }
+    } catch (e) {
+      console.error('Firebase initialization error:', e);
+    }
+
+    function openNoticeModal() {
+      const modal = document.getElementById('html-notice-modal');
+      if (modal) modal.style.display = 'flex';
+      const err = document.getElementById('modal-password-error');
+      if (err) { err.style.display = 'none'; err.textContent = ''; }
+    }
+
+    function closeNoticeModal() {
+      const modal = document.getElementById('html-notice-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function toggleNoticePasswordVisibility() {
+      const pwd = document.getElementById('new-modal-password');
+      if (pwd) pwd.type = pwd.type === 'password' ? 'text' : 'password';
+    }
+
+    function showNoticeError(message) {
+      const err = document.getElementById('modal-password-error');
+      if (err) { err.textContent = message; err.style.display = 'block'; }
+      else alert(message);
+    }
+
+    async function requireAdminSignIn() {
+      if (!firebaseReady || !auth) throw new Error('Firebase is not configured. Add your real Firebase web config first.');
+      if (auth.currentUser) return auth.currentUser;
+      const email = (document.getElementById('new-modal-email')?.value || '').trim();
+      const password = document.getElementById('new-modal-password')?.value || '';
+      if (!email || !password) throw new Error('Enter the admin email and password you created in Firebase Authentication.');
+      const credential = await auth.signInWithEmailAndPassword(email, password);
+      return credential.user;
+    }
+
+    // Publish only after Firebase confirms the write; never pretend a local-only notice is shared.
+    async function saveModalNotice() {
+      const titleInput = document.getElementById('new-modal-title');
+      const catInput = document.getElementById('new-modal-cat');
+      const dateInput = document.getElementById('new-modal-date');
+      const descInput = document.getElementById('new-modal-desc');
+      const pwdInput = document.getElementById('new-modal-password');
+      const emailInput = document.getElementById('new-modal-email');
+      const title = titleInput ? titleInput.value.trim() : '';
+      const details = descInput ? descInput.value.trim() : '';
+      const category = catInput ? catInput.value : 'general';
+      const date = (dateInput && dateInput.value.trim()) ? dateInput.value.trim() : new Date().toLocaleDateString();
+
+      if (!title || !details) { showNoticeError('Please fill in both Notice Title and Details.'); return; }
+      try {
+        await requireAdminSignIn();
+        const noticePayload = {
+          title, category, date, details,
+          content: `${details} (Effective: ${date})`,
+          timestamp: Date.now()
+        };
+        await noticesRef.push(noticePayload);
+        if (titleInput) titleInput.value = '';
+        if (descInput) descInput.value = '';
+        if (pwdInput) pwdInput.value = '';
+        if (emailInput) emailInput.value = '';
+        closeNoticeModal();
+        alert('Notice published to the shared online notice board successfully.');
+        const chatContainer = document.getElementById('chat-messages');
+        if (chatContainer) {
+          const sysDiv = document.createElement('div');
+          sysDiv.className = 'msg bot';
+          const safeTitle = document.createElement('span');
+          safeTitle.textContent = title;
+          sysDiv.append('✅ Notice published: ', safeTitle, document.createElement('br'), 'School AI can now use this notice.');
+          chatContainer.appendChild(sysDiv);
+        }
+      } catch (err) {
+        console.error('Notice publish failed:', err);
+        showNoticeError('Publish failed: ' + (err.message || 'Check Firebase config, Authentication, and Database Rules.'));
+      }
+    }
+
+    async function deleteNotice(id) {
+      if (!id || id.startsWith('local-')) { alert('This notice is not in the shared database.'); return; }
+      try {
+        if (!firebaseReady) throw new Error('Firebase is not configured.');
+        if (!auth.currentUser) {
+          const email = prompt('Admin email:');
+          if (!email) return;
+          const password = prompt('Firebase admin password:');
+          if (password === null) return;
+          await auth.signInWithEmailAndPassword(email.trim(), password);
+        }
+        await noticesRef.child(id).remove();
+      } catch (e) { alert('Could not delete notice: ' + (e.message || 'Check admin login and database rules.')); }
+    }
+
+    async function clearAllNotices() {
+      if (!confirm('Delete ALL school notices for every visitor? This cannot be undone.')) return;
+      try {
+        if (!firebaseReady) throw new Error('Firebase is not configured.');
+        if (!auth.currentUser) {
+          const email = prompt('Admin email:');
+          if (!email) return;
+          const password = prompt('Firebase admin password:');
+          if (password === null) return;
+          await auth.signInWithEmailAndPassword(email.trim(), password);
+        }
+        await noticesRef.remove();
+        alert('All shared notices have been deleted.');
+      } catch (e) { alert('Could not clear notices: ' + (e.message || 'Check admin login and database rules.')); }
+    }
+
+    // =========================================================================
+    // 3. Dynamic Real-time Notice Board Renderer
+    // =========================================================================
+    function renderNotices() {
+      const container = document.getElementById('noticeBoardDisplay') || document.getElementById('notices-container');
+      if (!container) return;
+
+      if (!localNotices || localNotices.length === 0) {
+        container.innerHTML = `
+          <div style="padding: 24px; text-align: center; color: #94a3b8; font-size: 0.88rem;">
+            No active notices at this time. (School is OPEN / स्कूल खुला है!)<br>
+            <button onclick="openNoticeModal()" style="margin-top: 10px; background: #4f46e5; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+              ➕ Add Notice
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      const escapeNoticeText = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+      container.innerHTML = localNotices.map(n => `
+        <div class="notice-item ${escapeNoticeText(n.category || 'general')}">
+          <div class="notice-title" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+            <div>
+              <span style="font-weight: 700; color: #0f172a;">${escapeNoticeText(n.title)}</span>
+              <span class="notice-date" style="margin-left: 8px; font-size: 0.75rem; color: #64748b;">${escapeNoticeText(n.date)}</span>
+            </div>
+            <button onclick="deleteNotice('${String(n.id).replace(/[^a-zA-Z0-9_-]/g, '')}')" title="Delete notice (admin sign-in required)" style="background: none; border: none; color: #ef4444; font-size: 0.8rem; cursor: pointer; padding: 2px 6px;">✕ Delete</button>
+          </div>
+          <div class="notice-desc" style="margin-top: 6px; font-size: 0.86rem; color: #475569;">${escapeNoticeText(n.details || n.content)}</div>
+        </div>
+      `).join('') + `
+        <div style="text-align: right; margin-top: 10px;">
+          <button onclick="openNoticeModal()" style="background: #f1f5f9; color: #4f46e5; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer;">
+            ➕ Add Another Notice (नया नोटिस जोड़ें)
+          </button>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 4. Real-time Firebase Database Listener (.on('value', ...))
+    // =========================================================================
+    if (noticesRef) {
+      noticesRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        const loadedNotices = [];
+        if (data) {
+          Object.keys(data).forEach((key) => {
+            const item = data[key];
+            loadedNotices.push({
+              id: key,
+              title: item.title || '',
+              category: item.category || 'general',
+              date: item.date || '',
+              details: item.details || item.content || '',
+              content: item.content || item.details || '',
+              timestamp: item.timestamp || 0
+            });
+          });
+        }
+        // Reverse order so newest is on top (sorted by timestamp descending)
+        loadedNotices.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        localNotices = loadedNotices;
+        renderNotices();
+        syncAiAssistantHolidayDisplay();
+      }, (error) => {
+        console.warn('Firebase notices on(value) error:', error);
+        const box = document.getElementById('noticeBoardDisplay');
+        if (box) box.innerHTML = '<div class="empty-box">Could not load shared notices. Check Firebase Database read rules and configuration.</div>';
+      });
+    } else {
+      const box = document.getElementById('noticeBoardDisplay');
+      if (box) box.innerHTML = '<div class="empty-box">Notice board setup required: add your real Firebase config to this HTML file. See the included setup guide.</div>';
+    }
+
+    // =========================================================================
+    // 5. School AI Assistant Holiday Rule Logic Sync
+    // =========================================================================
+    function getHolidayStatus() {
+      // Check if any active notice in database has category "Holiday" or "Leave"
+      const holidayNotice = localNotices.find(n => {
+        const cat = (n.category || '').toLowerCase();
+        const tit = (n.title || '').toLowerCase();
+        const det = (n.details || n.content || '').toLowerCase();
+        return (
+          cat === 'holiday' ||
+          cat === 'leave' ||
+          tit.includes('holiday') ||
+          tit.includes('leave') ||
+          tit.includes('chutti') ||
+          tit.includes('chhutti') ||
+          det.includes('holiday') ||
+          det.includes('leave') ||
+          det.includes('chutti') ||
+          det.includes('chhutti') ||
+          det.includes('closed') ||
+          det.includes('अवकाश') ||
+          tit.includes('अवकाश')
+        );
+      });
+
+      if (holidayNotice) {
+        return {
+          isHoliday: true,
+          notice: holidayNotice,
+          hindi: `हाँ, आधिकारिक नोटिस के अनुसार स्कूल में छुट्टी (Holiday / Leave) घोषित है। विवरण: ${holidayNotice.title} (${holidayNotice.details || holidayNotice.content})`,
+          english: `Yes, the school has confirmed a Holiday / Leave as per official notice: "${holidayNotice.title}". Details: ${holidayNotice.details || holidayNotice.content}`,
+          combined: `📌 Holiday Declared / छुट्टी घोषित:\n\n• Hindi: हाँ, स्कूल के आधिकारिक नोटिस के अनुसार स्कूल में छुट्टी (Holiday / Leave) है।\n  विवरण: ${holidayNotice.title} (${holidayNotice.details || holidayNotice.content})\n\n• English: Yes, as per official school notices, the school will remain CLOSED / on Leave.\n  Notice: ${holidayNotice.title} - ${holidayNotice.details || holidayNotice.content}`
+        };
+      } else {
+        return {
+          isHoliday: false,
+          notice: null,
+          hindi: `स्कूल खुला है (School is OPEN)! रिकॉर्ड में किसी छुट्टी का नोटिस नहीं है। सभी कक्षाएं समय पर चलेंगी।`,
+          english: `School is OPEN (स्कूल खुला है)! No holiday notice is found in the database. All classes are regular.`,
+          combined: `🏫 School is OPEN (स्कूल खुला है)!\n\n• Hindi: स्कूल खुला है (School is OPEN)! रिकॉर्ड में किसी भी छुट्टी (Holiday) या अवकाश का नोटिस नहीं है। सभी कक्षाएं अपने निर्धारित समय पर चलेंगी।\n\n• English: School is OPEN (स्कूल खुला है)! No holiday or leave notice is present in the database. All classes will run as per normal regular schedule.`
+        };
+      }
+    }
+
+    // Helper: removes all asterisks (**) completely so they never show in AI answers
+    function cleanAndFormatAiText(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/\*\*/g, '')
+        .replace(/\*/g, '')
+        .replace(/\n/g, '<br>');
+    }
+
+    function syncAiAssistantHolidayDisplay() {
+      const status = getHolidayStatus();
+      const contentEl = document.getElementById('ai-response-content');
+      const boxEl = document.getElementById('embedded-ai-response');
+      if (contentEl && boxEl && boxEl.style.display !== 'none') {
+        contentEl.innerHTML = cleanAndFormatAiText(status.combined);
+      }
+    }
+
+    // =========================================================================
+    // Voice Input / Speech-to-Text Microphone Engine (Web Speech API)
+    // =========================================================================
+    let voiceRecognition = null;
+    let isVoiceListening = false;
+    let activeVoiceTarget = null; // 'embedded' or 'chat'
+
+    function setupVoiceRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        return null;
+      }
+      const recog = new SpeechRecognition();
+      recog.continuous = false;
+      recog.interimResults = true;
+      recog.lang = 'hi-IN'; // Indian locale recognizing Hindi, Hinglish and English
+
+      recog.onstart = () => {
+        isVoiceListening = true;
+        updateVoiceUI(true);
+      };
+
+      recog.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+
+        if (activeVoiceTarget === 'embedded') {
+          const input = document.getElementById('embedded-ai-input');
+          if (input) input.value = transcript;
+        } else if (activeVoiceTarget === 'chat') {
+          const input = document.getElementById('chat-input');
+          if (input) input.value = transcript;
+        }
+
+        const isFinal = event.results[event.results.length - 1].isFinal;
+        if (isFinal) {
+          stopVoiceInput();
+          setTimeout(() => {
+            if (activeVoiceTarget === 'embedded') {
+              sendEmbeddedQuery();
+            } else if (activeVoiceTarget === 'chat') {
+              sendChatMessage();
+            }
+          }, 350);
+        }
+      };
+
+      recog.onerror = (event) => {
+        console.warn('Voice recognition error:', event.error);
+        stopVoiceInput();
+        if (event.error === 'not-allowed') {
+          alert('माइक्रोफ़ोन अनुमति अस्वीकृत है। कृपया ब्राउज़र सेटिंग्स में माइक्रोफ़ोन की अनुमति दें। (Microphone permission denied. Please allow microphone access).');
+        }
+      };
+
+      recog.onend = () => {
+        isVoiceListening = false;
+        updateVoiceUI(false);
+      };
+
+      return recog;
+    }
+
+    function toggleVoiceInput(target) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('आपके ब्राउज़र में वॉयस इनपुट (Speech Recognition) समर्थित नहीं है। कृपया Google Chrome या समर्थित ब्राउज़र का उपयोग करें। (Voice input is not supported in this browser. Please use Google Chrome or Edge).');
+        return;
+      }
+
+      if (isVoiceListening) {
+        stopVoiceInput();
+        return;
+      }
+
+      activeVoiceTarget = target;
+      if (!voiceRecognition) {
+        voiceRecognition = setupVoiceRecognition();
+      }
+
+      try {
+        voiceRecognition.start();
+      } catch (err) {
+        console.warn('Voice start warning:', err);
+        try {
+          voiceRecognition.stop();
+          setTimeout(() => voiceRecognition.start(), 200);
+        } catch (e) {}
+      }
+    }
+
+    function stopVoiceInput() {
+      if (voiceRecognition && isVoiceListening) {
+        try {
+          voiceRecognition.stop();
+        } catch (e) {}
+      }
+      isVoiceListening = false;
+      updateVoiceUI(false);
+    }
+
+    function updateVoiceUI(listening) {
+      const embBtn = document.getElementById('embedded-mic-btn');
+      const embStatus = document.getElementById('embedded-voice-status');
+      const chatBtn = document.getElementById('chat-mic-btn');
+      const chatStatus = document.getElementById('chat-voice-status');
+
+      if (listening) {
+        if (activeVoiceTarget === 'embedded') {
+          if (embBtn) {
+            embBtn.classList.add('listening');
+            embBtn.innerHTML = '🔴';
+            embBtn.title = 'सुन रहा हूँ... रोकने के लिए क्लिक करें (Click to stop)';
+          }
+          if (embStatus) embStatus.style.display = 'flex';
+        } else if (activeVoiceTarget === 'chat') {
+          if (chatBtn) {
+            chatBtn.classList.add('listening');
+            chatBtn.innerHTML = '🔴';
+            chatBtn.title = 'सुन रहा हूँ... रोकने के लिए क्लिक करें (Click to stop)';
+          }
+          if (chatStatus) chatStatus.style.display = 'block';
+        }
+      } else {
+        if (embBtn) {
+          embBtn.classList.remove('listening');
+          embBtn.innerHTML = '🎤';
+          embBtn.title = 'बोलकर पूछें (Click to Speak / Voice Search)';
+        }
+        if (embStatus) embStatus.style.display = 'none';
+
+        if (chatBtn) {
+          chatBtn.classList.remove('listening');
+          chatBtn.innerHTML = '🎤';
+          chatBtn.title = 'बोलकर पूछें (Click to Speak)';
+        }
+        if (chatStatus) chatStatus.style.display = 'none';
+      }
+    }
+
+    // Toggle AI drawer
+    function toggleAiDrawer() {
+      const win = document.getElementById('ai-chat-window');
+      if (win.style.display === 'flex') {
+        win.style.display = 'none';
+      } else {
+        win.style.display = 'flex';
+        document.getElementById('chat-input').focus();
+      }
+    }
+
+    // Handle Quick Preset
+    function handlePreset(text) {
+      document.getElementById('embedded-ai-input').value = text;
+      sendEmbeddedQuery();
+    }
+
+    function askHoliday() {
+      toggleAiDrawer();
+      const input = document.getElementById('chat-input');
+      input.value = "Kal holiday hai kya?";
+      sendChatMessage();
+    }
+
+    // Core AI Response Engine (Server API + Deterministic Bilingual Holiday Engine)
+    async function querySchoolAI(promptText) {
+      const trimmed = promptText.trim();
+      const lower = trimmed.toLowerCase();
+
+      // 1. Try server API /api/chat if online
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [{ role: 'user', content: trimmed }],
+            notices: localNotices,
+            schoolContext: { name: 'NJS Public School' }
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.reply) return data.reply.replace(/\*\*/g, '').replace(/\*/g, '');
+        }
+      } catch (err) {
+        // Fallback to local AI engine
+      }
+
+      // 2. Dedicated Handler: "new message" / "क्या कोई नया नोटिस आया है?" / Latest notification
+      const isNewNoticeQuery =
+        lower.includes('new message') ||
+        lower.includes('naya message') ||
+        lower.includes('naye message') ||
+        lower.includes('मैसेज') ||
+        lower.includes('message') ||
+        lower.includes('क्या कोई नया नोटिस') ||
+        lower.includes('kya koi naya notice') ||
+        lower.includes('koi naya notice') ||
+        lower.includes('naya notice') ||
+        lower.includes('नया नोटिस') ||
+        lower.includes('नया संदेश') ||
+        lower.includes('latest notice') ||
+        lower.includes('latest notification') ||
+        lower.includes('latest message') ||
+        lower.includes('notice') ||
+        lower.includes('circular') ||
+        lower.includes('notification') ||
+        lower.includes('suchna') ||
+        lower.includes('सूचना');
+
+      if (isNewNoticeQuery) {
+        if (localNotices.length === 0) {
+          return `📢 सूचना / Notifications:\n\nवर्तमान में एडमिन द्वारा कोई नया नोटिस या मैसेज जारी नहीं किया गया है। विद्यालय में कोई अवकाश नहीं है और स्कूल खुला है (School is OPEN)!`;
+        }
+        const latest = localNotices[0];
+        const isHoliday = latest.category === 'holiday' || latest.title.toLowerCase().includes('holiday') || latest.content.toLowerCase().includes('holiday');
+        return `📢 एडमिन द्वारा जारी नवीनतम नोटिफिकेशन (Latest Notification Added by Admin):\n\n` +
+          `📌 शीर्षक (Title): ${latest.title}\n` +
+          `📅 दिनांक (Date): ${latest.date}\n` +
+          `📝 विवरण (Details): ${latest.content}\n\n` +
+          (isHoliday ? `⚠️ School Status: इस नोटिस के अनुसार स्कूल में छुट्टी (Holiday) घोषित है।` : `🏫 School Status: स्कूल खुला है (School is OPEN)।`);
+      }
+
+      // 3. Admissions & Registration Query:
+      if (
+        lower.includes('admission') ||
+        lower.includes('admissions') ||
+        lower.includes('dakhila') ||
+        lower.includes('daakhila') ||
+        lower.includes('registration') ||
+        lower.includes('pravesh') ||
+        lower.includes('प्रवेश') ||
+        lower.includes('दाखिला') ||
+        lower.includes('new student') ||
+        lower.includes('enroll') ||
+        lower.includes('apply')
+      ) {
+        return `🎓 Admission Information / प्रवेश संबंधी जानकारी:\n\n` +
+          `• Session: शैक्षणिक सत्र 2026-2027 के लिए Nursery से Class XII तक प्रवेश प्रक्रिया खुली है।\n` +
+          `• Classes: Playgroup, Nursery, LKG, UKG, Primary, Middle, Secondary और Senior Secondary (Science, Commerce व Arts संकाय)।\n` +
+          `• Required Documents: जन्म प्रमाण पत्र, ट्रांसफर सर्टिफिकेट (TC), पिछली कक्षा की मार्कशीट, आधार कार्ड, 4 पासपोर्ट साइज फोटो।\n` +
+          `• Application Desk: स्कूल कार्यालय में आकर सीधे प्रवेश फॉर्म प्राप्त करें या संपर्क करें।\n` +
+          `• Official Email: seemaanantom@gmail.com\n` +
+          `• Office Timings: प्रातः 8:30 AM से दोपहर 1:30 PM तक प्रवेश काउंटर खुला रहता है।`;
+      }
+
+      // 4. Fees Structure & Tuition Query:
+      if (
+        lower.includes('fee') ||
+        lower.includes('fees') ||
+        lower.includes('kharch') ||
+        lower.includes('kharcha') ||
+        lower.includes('charges') ||
+        lower.includes('tuition') ||
+        lower.includes('फीस') ||
+        lower.includes('शुल्क') ||
+        lower.includes('payment')
+      ) {
+        return `💳 Fee Structure / शुल्क विवरण:\n\n` +
+          `• NJS Public School में पारदर्शी और किफायती शुल्क संरचना (Transparent & Affordable Fee Structure) है।\n` +
+          `• कक्षा-वार मासिक शिक्षण शुल्क (Tuition Fees), प्रवेश शुल्क और बस परिवहन शुल्क का विवरण विद्यालय के लेखा विभाग (Accounts Desk) में उपलब्ध है।\n` +
+          `• फीस का भुगतान ऑनलाइन (UPI/Net Banking) अथवा विद्यालय के कैश काउंटर पर आसानी से किया जा सकता है।\n` +
+          `• सटीक कक्षा-वार शुल्क जानकारी के लिए स्कूल कार्यालय आएं या ईमेल करें: seemaanantom@gmail.com`;
+      }
+
+      // 5. School Timings & Hours Query:
+      if (
+        lower.includes('timing') ||
+        lower.includes('timings') ||
+        lower.includes('samay') ||
+        lower.includes('समय') ||
+        lower.includes('kitne baje') ||
+        lower.includes('kab khulta') ||
+        lower.includes('kab se kab') ||
+        lower.includes('school hours') ||
+        lower.includes('time table') ||
+        lower.includes('schedule')
+      ) {
+        return `⏰ School Timings / विद्यालय समय सारणी:\n\n` +
+          `• Summer Timings (ग्रीष्मकालीन): प्रातः 7:30 AM से दोपहर 1:30 PM\n` +
+          `• Winter Timings (शीतकालीन): प्रातः 8:30 AM से दोपहर 2:30 PM\n` +
+          `• Office & Administration: सोमवार से शनिवार, प्रातः 8:00 AM से दोपहर 3:00 PM\n` +
+          `• प्रार्थना सभा (Morning Assembly) स्कूल शुरू होने से 10 मिनट पहले आयोजित की जाती है, अतः सभी छात्र समय पर पहुंचे।`;
+      }
+
+      // 6. Address, Location & Directions Query:
+      if (
+        lower.includes('address') ||
+        lower.includes('location') ||
+        lower.includes('kahan hai') ||
+        lower.includes('kaha hai') ||
+        lower.includes('where is') ||
+        lower.includes('pata') ||
+        lower.includes('पता') ||
+        lower.includes('place') ||
+        lower.includes('directions') ||
+        lower.includes('rasta') ||
+        lower.includes('map')
+      ) {
+        return `📍 School Location & Address / विद्यालय का पता:\n\n` +
+          `• Institution: NJS Public School (Motto: Creator of Knowledge)\n` +
+          `• Campus: शांत, सुरम्य और विशाल हरियाली से युक्त आधुनिक विद्यालय परिसर।\n` +
+          `• Web Portal: https://seemaanantom-eng.github.io/NJSpublicSchool/\n` +
+          `• Accessibility: मुख्य सड़क से सुगम आवागमन व सभी प्रमुख मार्गों पर स्कूल बस सेवा उपलब्ध है।\n` +
+          `• अधिक जानकारी के लिए ईमेल करें: seemaanantom@gmail.com`;
+      }
+
+      // 7. Contact, Phone & Helpline Query:
+      if (
+        lower.includes('contact') ||
+        lower.includes('phone') ||
+        lower.includes('mobile') ||
+        lower.includes('email') ||
+        lower.includes('mail') ||
+        lower.includes('helpline') ||
+        lower.includes('sampark') ||
+        lower.includes('सम्पर्क') ||
+        lower.includes('संपर्क') ||
+        lower.includes('number') ||
+        lower.includes('call')
+      ) {
+        return `📞 Contact & Helpdesk / संपर्क सूत्र:\n\n` +
+          `• Official Email: seemaanantom@gmail.com\n` +
+          `• Website: https://seemaanantom-eng.github.io/NJSpublicSchool/\n` +
+          `• Official YouTube Channel: @anantgahlaut (https://www.youtube.com/@anantgahlaut)\n` +
+          `• Helpdesk Hours: सोमवार से शनिवार, प्रातः 8:00 AM से दोपहर 2:30 PM\n` +
+          `• किसी भी पूछताछ, प्रवेश या सुझाव के लिए आप ईमेल भेज सकते हैं या स्कूल के रिसेप्शन काउंटर पर संपर्क कर सकते हैं।`;
+      }
+
+      // 8. Transport, Bus & Van Facility Query:
+      if (
+        lower.includes('transport') ||
+        lower.includes('bus') ||
+        lower.includes('van') ||
+        lower.includes('route') ||
+        lower.includes('conveyance') ||
+        lower.includes('pick up') ||
+        lower.includes('pickup') ||
+        lower.includes('gadi') ||
+        lower.includes('वाहन') ||
+        lower.includes('बस')
+      ) {
+        return `🚌 Transport & Bus Facility / परिवहन सुविधा:\n\n` +
+          `• Fleet: NJS Public School में जीपीएस (GPS) से सुसज्जित सुरक्षित बसों का सुव्यवस्थित बेड़ा है।\n` +
+          `• Safety: प्रत्येक बस में प्रशिक्षित चालक और महिला सहायक (Female Attendant) उपस्थित रहती हैं।\n` +
+          `• Coverage: आसपास के सभी प्रमुख गांवों, कस्बों और कॉलोनियों में सुरक्षित पिक-एंड-ड्रॉप सुविधा।\n` +
+          `• अपने क्षेत्र के बस रूट और स्टॉपेज की जानकारी के लिए स्कूल कार्यालय में ट्रांसपोर्ट इंचार्ज से संपर्क करें।`;
+      }
+
+      // 9. Faculty, Teachers, Principal & Staff Query:
+      if (
+        lower.includes('principal') ||
+        lower.includes('teacher') ||
+        lower.includes('teachers') ||
+        lower.includes('faculty') ||
+        lower.includes('staff') ||
+        lower.includes('adhyapak') ||
+        lower.includes('अध्यापक') ||
+        lower.includes('shikshak') ||
+        lower.includes('शिक्षक') ||
+        lower.includes('sir') ||
+        lower.includes('maam') ||
+        lower.includes('madam') ||
+        lower.includes('management')
+      ) {
+        return `👩‍🏫 Faculty & Leadership / शिक्षक व प्रबंधन:\n\n` +
+          `• NJS Public School में उच्च शिक्षित, प्रशिक्षित और अनुभवी अध्यापकों (Experienced Teachers) का समूह है।\n` +
+          `• Teacher-Student Ratio: 1:25 का आदर्श अनुपात ताकि प्रत्येक बच्चे पर व्यक्तिगत ध्यान दिया जा सके।\n` +
+          `• Mentorship: शिक्षक न केवल किताबी ज्ञान देते हैं बल्कि संस्कार, अनुशासन, खेल और प्रतियोगी परीक्षाओं का मार्गदर्शन भी करते हैं।\n` +
+          `• अभिभावक PTM के दिन अथवा पूर्व समय लेकर शिक्षकों से सीधे मिल सकते हैं।`;
+      }
+
+      // 10. Curriculum, Classes, Streams & Syllabus Query:
+      if (
+        lower.includes('curriculum') ||
+        lower.includes('syllabus') ||
+        lower.includes('stream') ||
+        lower.includes('streams') ||
+        lower.includes('subject') ||
+        lower.includes('subjects') ||
+        lower.includes('board') ||
+        lower.includes('cbse') ||
+        lower.includes('science') ||
+        lower.includes('commerce') ||
+        lower.includes('arts') ||
+        lower.includes('nursery') ||
+        lower.includes('10th') ||
+        lower.includes('12th') ||
+        lower.includes('कक्षा') ||
+        lower.includes('पाठ्यक्रम')
+      ) {
+        return `📚 Curriculum & Academic Streams / पाठ्यक्रम व कक्षाएं:\n\n` +
+          `• Classes: Nursery से Class 12th तक सीबीएसई (CBSE) आधारित समग्र पाठ्यक्रम।\n` +
+          `• Streams (कक्षा 11 व 12):\n` +
+          `  1. Science Stream: Physics, Chemistry, Mathematics, Biology, Computer Science\n` +
+          `  2. Commerce Stream: Accountancy, Business Studies, Economics, Mathematics\n` +
+          `  3. Arts / Humanities: History, Political Science, Geography, Hindi, English\n` +
+          `• Focus: एक्टिविटी-बेस्ड लर्निंग, स्मार्ट क्लासरूम्स और निरंतर मूल्यांकन।`;
+      }
+
+      // 11. Facilities, Labs, Library & Campus Query:
+      if (
+        lower.includes('facility') ||
+        lower.includes('facilities') ||
+        lower.includes('lab') ||
+        lower.includes('labs') ||
+        lower.includes('library') ||
+        lower.includes('computer') ||
+        lower.includes('smart class') ||
+        lower.includes('infrastructure') ||
+        lower.includes('pottery') ||
+        lower.includes('clay') ||
+        lower.includes('पुस्तकालय') ||
+        lower.includes('प्रयोगशाला')
+      ) {
+        return `🏛️ Campus & Infrastructure Facilities / विद्यालय की आधुनिक सुविधाएं:\n\n` +
+          `• High-Tech Labs: आधुनिक भौतिक, रसायन, जीव विज्ञान एवं कंप्यूटर प्रयोगशालाएं।\n` +
+          `• Digital Library: 10,000+ से अधिक पुस्तकें, विश्वकोश, संदर्भ ग्रंथ व ई-लर्निंग सामग्री।\n` +
+          `• Smart Classrooms: ऑडियो-विजुअल प्रोजेक्टर और इंटरएक्टिव डिजिटल स्क्रीन।\n` +
+          `• Pottery & Art Studio: रचनात्मकता और हस्तकला के विकास के लिए पॉटरी व क्ले स्कल्पटिंग स्टूडियो।\n` +
+          `• Safety & Health: 24/7 सीसीटीवी सुरक्षा, आरओ (RO) शुद्ध पेयजल और प्राथमिक चिकित्सा कक्ष।`;
+      }
+
+      // 12. 400m Olympic Track, Sports & Games Query:
+      if (
+        lower.includes('track') ||
+        lower.includes('sports') ||
+        lower.includes('400m') ||
+        lower.includes('race') ||
+        lower.includes('running') ||
+        lower.includes('cricket') ||
+        lower.includes('football') ||
+        lower.includes('athletic') ||
+        lower.includes('athletics') ||
+        lower.includes('khel') ||
+        lower.includes('खेल') ||
+        lower.includes('ground') ||
+        lower.includes('मैदान')
+      ) {
+        return `🏃 400m Olympic-Grade Track & Sports Excellence:\n\n` +
+          `• 400 Meter Olympic-grade All-weather Running Track: पेशेवर एथलीटों व धावकों के प्रशिक्षण हेतु विशेष रूप से निर्मित।\n` +
+          `• Football & Cricket: फीफा मानक टर्फ फुटबॉल ग्राउंड और क्रिकेट नेट प्रैक्टिस की सुविधा।\n` +
+          `• Courts: बास्केटबॉल कोर्ट, बैडमिंटन कोर्ट और टेबल टेनिस कक्ष।\n` +
+          `• Achievements: विद्यालय के छात्र जिला, राज्य और राष्ट्रीय स्तर की खेल प्रतियोगिताओं में भाग लेकर पदक जीतते हैं।`;
+      }
+
+      // 13. Hastinapur Educational Excursion:
+      if (
+        lower.includes('hastinapur') ||
+        lower.includes('trip') ||
+        lower.includes('excursion') ||
+        lower.includes('tour') ||
+        lower.includes('picnic') ||
+        lower.includes('हस्तिनापुर') ||
+        lower.includes('भ्रमण')
+      ) {
+        return `🚌 Hastinapur Educational Excursion / ऐतिहासिक भ्रमण:\n\n` +
+          `• NJS Public School द्वारा प्राचीन ऐतिहासिक हस्तिनापुर (महाभारत कालीन कुरु साम्राज्य, विदुर टीला व प्रसिद्ध जैन मंदिरों) के लिए वार्षिक शैक्षिक भ्रमण आयोजित किया जाता है।\n` +
+          `• Features: प्रमाणित वातानुकूलित लग्जरी बसें, शुद्ध पौष्टिक बुफे भोजन, और 24/7 शिक्षकों व प्राथमिक चिकित्सा दल की प्रत्यक्ष देखरेख।\n` +
+          `• यह यात्रा छात्रों को भारत के समृद्ध इतिहास और पुरातत्व से सजीव रूप से जोड़ती है।`;
+      }
+
+      // 14. Uniform & Dress Code Query:
+      if (
+        lower.includes('uniform') ||
+        lower.includes('dress') ||
+        lower.includes('dress code') ||
+        lower.includes('clothes') ||
+        lower.includes('गणवेश') ||
+        lower.includes('वर्दी') ||
+        lower.includes('shoes') ||
+        lower.includes('tie')
+      ) {
+        return `👔 Uniform & Dress Code / विद्यालय गणवेश:\n\n` +
+          `• Regular Days: स्कूल की औपचारिक शर्ट, पैंट/स्कर्ट, स्कूल बेल्ट, टाई, काले जूते और सफेद मोजे।\n` +
+          `• Sports Day (बुधवार व शनिवार): हाउस टी-शर्ट (House T-shirt), सफेद लोअर और सफेद पीटी शूज।\n` +
+          `• Winter Season: विद्यालय के लोगो वाला नेवी ब्लू ब्लेज़र / स्वेटर।\n` +
+          `• सभी विद्यार्थियों से अनुशासन और स्वच्छ गणवेश में आने का आग्रह किया जाता है।`;
+      }
+
+      // 15. Results, Toppers & Academic Awards Query:
+      if (
+        lower.includes('result') ||
+        lower.includes('results') ||
+        lower.includes('topper') ||
+        lower.includes('toppers') ||
+        lower.includes('rank') ||
+        lower.includes('marks') ||
+        lower.includes('achievement') ||
+        lower.includes('achievements') ||
+        lower.includes('परिणाम') ||
+        lower.includes('अंक')
+      ) {
+        return `🏆 Academic Results & Achievements / परीक्षा परिणाम:\n\n` +
+          `• 100% Pass Record: NJS Public School का बोर्ड परीक्षाओं में लगातार 100% उत्कृष्ट परिणाम का गौरवशाली इतिहास है।\n` +
+          `• Toppers: हमारे मेधावी विद्यार्थियों ने 95%+ से अधिक अंक प्राप्त कर विद्यालय व क्षेत्र का नाम रोशन किया है।\n` +
+          `• Awards: छात्रों को विज्ञान प्रदर्शनी, वाद-विवाद, निबंध लेखन और ओलंपियाड में नियमित रूप से राज्य व राष्ट्रीय पुरस्कार मिलते हैं।`;
+      }
+
+      // 16. Examinations & Tests Query:
+      if (
+        lower.includes('exam') ||
+        lower.includes('exams') ||
+        lower.includes('pariksha') ||
+        lower.includes('परीक्षा') ||
+        lower.includes('test') ||
+        lower.includes('tests') ||
+        lower.includes('date sheet') ||
+        lower.includes('datesheet')
+      ) {
+        return `📝 Examinations & Date Sheet / परीक्षा संबंधी सूचना:\n\n` +
+          `• Periodic Tests, Mid-Term और Annual Examinations शैक्षणिक कैलेंडर के अनुसार आयोजित की जाती हैं।\n` +
+          `• विस्तृत डेट शीट स्कूल नोटिस बोर्ड और इस ऑनलाइन पोर्टल पर समय से पूर्व प्रकाशित की जाती है।\n` +
+          `• सभी विद्यार्थी परीक्षा केंद्र पर समय से 15 मिनट पूर्व अपने एडमिट कार्ड व पेन-पेंसिल बॉक्स के साथ उपस्थित हों।`;
+      }
+
+      // 17. Official YouTube Channel & Media:
+      if (
+        lower.includes('youtube') ||
+        lower.includes('video') ||
+        lower.includes('channel') ||
+        lower.includes('anant') ||
+        lower.includes('anantgahlaut') ||
+        lower.includes('यूट्यूब')
+      ) {
+        return `▶️ Official YouTube Channel & Media:\n\n` +
+          `• हमारा आधिकारिक यूट्यूब चैनल @anantgahlaut है: https://www.youtube.com/@anantgahlaut\n` +
+          `• यहाँ 400m ओलंपिक एथलेटिक्स ट्रैक, वार्षिक खेल उत्सव, सांस्कृतिक प्रस्तुतियां और विज्ञान प्रदर्शनियों के वीडियो उपलब्ध हैं। चैनल को सब्सक्राइब करें!`;
+      }
+
+      // 18. Greetings (Hi, Hello, Namaste, Good Morning, etc.):
+      if (
+        lower === 'hi' ||
+        lower === 'hello' ||
+        lower === 'hey' ||
+        lower.startsWith('hi ') ||
+        lower.startsWith('hello ') ||
+        lower.includes('namaste') ||
+        lower.includes('namaskar') ||
+        lower.includes('pranam') ||
+        lower.includes('नमस्ते') ||
+        lower.includes('नमस्कार') ||
+        lower.includes('good morning') ||
+        lower.includes('good afternoon') ||
+        lower.includes('good evening') ||
+        lower.includes('kaise ho')
+      ) {
+        return `🙏 नमस्ते! NJS Public School AI वर्चुअल सहायक में आपका स्वागत है।\n\n` +
+          `मैं आपके प्रश्नों का सही और सटीक उत्तर देने के लिए यहाँ हूँ। आप मुझसे पूछ सकते हैं:\n` +
+          `• 🎓 प्रवेश और शुल्क (Admissions & Fees)\n` +
+          `• ⏰ स्कूल का समय व टाइम टेबल (Timings & Hours)\n` +
+          `• 📍 स्कूल का पता व संपर्क सूत्र (Address & Contact)\n` +
+          `• 🚌 बस व ट्रांसपोर्ट सुविधा (Bus & Transport)\n` +
+          `• 🏃 400m ओलंपिक ट्रैक व खेल (Sports & 400m Track)\n` +
+          `• 🏫 क्या कल स्कूल खुला है या छुट्टी है? (Holiday / Open Status)\n\n` +
+          `बताइए, आज मैं आपकी क्या सहायता कर सकता हूँ?`;
+      }
+
+      // 19. Holiday & Open/Closed Status Rule-Engine (ONLY when user explicitly asks about holiday/leave/open/closed):
+      const isHolidayQuestion =
+        lower.includes('holiday') ||
+        lower.includes('chutti') ||
+        lower.includes('chhutti') ||
+        lower.includes('छुट्टी') ||
+        lower.includes('अवकाश') ||
+        lower.includes('leave') ||
+        lower.includes('is school open') ||
+        lower.includes('kya school khula') ||
+        lower.includes('khula') ||
+        lower.includes('khulega') ||
+        lower.includes('band') ||
+        lower.includes('off');
+
+      if (isHolidayQuestion) {
+        return getHolidayStatus().combined;
+      }
+
+      // 20. General / Unrecognized Query (Polite, helpful and non-repetitive guidance):
+      return `नमस्ते! आपने NJS Public School के संबंध में प्रश्न पूछा है: "${trimmed}"\n\n` +
+        `कृपया अधिक स्पष्ट प्रश्न पूछें, या निम्नलिखित में से चुनें:\n` +
+        `• 🎓 प्रवेश प्रक्रिया (Admissions 2026-27)\n` +
+        `• 💳 शुल्क विवरण (Fees Structure)\n` +
+        `• ⏰ विद्यालय समय (Summer 7:30 AM–1:30 PM / Winter 8:30 AM–2:30 PM)\n` +
+        `• 📍 स्कूल का पता व संपर्क (Address: seemaanantom@gmail.com)\n` +
+        `• 🚌 बस व ट्रांसपोर्ट (Safe GPS Buses)\n` +
+        `• 🏃 400m ऑल-वेदर ट्रैक व खेल (Sports Facilities)\n` +
+        `• 🏫 क्या कल स्कूल खुला है या छुट्टी? (Holiday Status)\n\n` +
+        `आप सीधे अपना सवाल लिख सकते हैं या माइक 🎙️ बटन दबाकर बोल सकते हैं!`;
+    }
+
+    // Embedded AI Query
+    async function sendEmbeddedQuery() {
+      const input = document.getElementById('embedded-ai-input');
+      const box = document.getElementById('embedded-ai-response');
+      const content = document.getElementById('ai-response-content');
+      const text = input.value.trim();
+      if (!text) return;
+
+      box.style.display = 'block';
+      content.innerHTML = '<span style="color: #34d399;">Thinking... (AI जवाब तैयार कर रहा है)</span>';
+
+      const reply = await querySchoolAI(text);
+      content.innerHTML = cleanAndFormatAiText(reply);
+    }
+
+    // Chat Drawer Messages
+    async function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const container = document.getElementById('chat-messages');
+      const text = input.value.trim();
+      if (!text) return;
+
+      // Add user message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'msg user';
+      userDiv.innerText = text;
+      container.appendChild(userDiv);
+      input.value = '';
+      container.scrollTop = container.scrollHeight;
+
+      // Loading bot message
+      const botDiv = document.createElement('div');
+      botDiv.className = 'msg bot';
+      botDiv.innerHTML = '<em>सोच रहा हूँ...</em>';
+      container.appendChild(botDiv);
+      container.scrollTop = container.scrollHeight;
+
+      const reply = await querySchoolAI(text);
+      botDiv.innerHTML = cleanAndFormatAiText(reply);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // Mega Sliders (from seemaanantom-eng.github.io)
+    let mega1Index = 0;
+    const mega1Slides = document.querySelectorAll('.mega1-slide');
+    function moveMega1Slide(dir) {
+      const slides = document.querySelectorAll('.mega1-slide');
+      if (!slides.length) return;
+      slides[mega1Index].style.display = 'none';
+      mega1Index = (mega1Index + dir + slides.length) % slides.length;
+      slides[mega1Index].style.display = 'block';
+      const counter = document.getElementById('mega1-counter');
+      if (counter) counter.innerText = `${mega1Index + 1} of ${slides.length}`;
+    }
+
+    let mega2Index = 0;
+    function moveMega2Slide(dir) {
+      const slides = document.querySelectorAll('.mega2-slide');
+      if (!slides.length) return;
+      slides[mega2Index].style.display = 'none';
+      mega2Index = (mega2Index + dir + slides.length) % slides.length;
+      slides[mega2Index].style.display = 'block';
+      const counter = document.getElementById('mega2-counter');
+      if (counter) counter.innerText = `${mega2Index + 1} of ${slides.length}`;
+    }
+
+    // =========================================================================
+    // Photo Gallery & Image Testing Engine for Standalone HTML
+    // =========================================================================
+    const DEFAULT_HTML_PHOTOS = [
+      {
+        id: 'p1',
+        url: 'https://seemaanantom-eng.github.io/NJSpublicSchool/akshu.jpg',
+        title: 'Team Workshop & Mentorship',
+        subtitle: 'Interactive learning and faculty guidance',
+        aspect: 'normal'
+      },
+      {
+        id: 'p2',
+        url: 'https://seemaanantom-eng.github.io/NJSpublicSchool/yash.jpg',
+        title: 'Summer Outing & Excursions',
+        subtitle: 'Student field exploration',
+        aspect: 'tall'
+      },
+      {
+        id: 'p3',
+        url: 'https://seemaanantom-eng.github.io/NJSpublicSchool/group.jpg',
+        title: 'Annual Gala 2026',
+        subtitle: 'Felicitation and convocation',
+        aspect: 'wide'
+      }
+    ];
+
+    let htmlGalleryPhotos = [];
+    try {
+      const saved = localStorage.getItem('njs_html_gallery_photos_v1');
+      if (saved) {
+        htmlGalleryPhotos = JSON.parse(saved);
+      }
+    } catch (e) {}
+    if (!htmlGalleryPhotos || !htmlGalleryPhotos.length) {
+      htmlGalleryPhotos = [...DEFAULT_HTML_PHOTOS];
+    }
+
+    function renderHtmlGallery() {
+      const grid = document.getElementById('html-photo-grid');
+      const resetBtn = document.getElementById('html-reset-gallery-btn');
+      const countSpan = document.getElementById('html-gallery-count');
+      if (!grid) return;
+
+      const hasTest = htmlGalleryPhotos.some(p => p.isTest);
+      if (resetBtn) resetBtn.style.display = hasTest ? 'inline-block' : 'none';
+      if (countSpan) {
+        const testCount = htmlGalleryPhotos.filter(p => p.isTest).length;
+        countSpan.innerText = `${htmlGalleryPhotos.length} Photos ${testCount ? `(${testCount} in Test Mode)` : ''}`;
+      }
+
+      grid.innerHTML = '';
+      htmlGalleryPhotos.forEach(photo => {
+        const item = document.createElement('div');
+        item.className = 'photo-item' + (photo.aspect === 'tall' ? ' tall' : photo.aspect === 'wide' ? ' wide' : '');
+        item.style.position = 'relative';
+
+        let testBadge = '';
+        let deleteBtn = '';
+        if (photo.isTest) {
+          testBadge = `<span style="position: absolute; top: 8px; left: 8px; z-index: 5; background: #f59e0b; color: #0f172a; font-weight: 800; font-size: 0.65rem; padding: 2px 7px; border-radius: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">🧪 TEST</span>`;
+          deleteBtn = `<button onclick="removeHtmlTestImage('${photo.id}')" style="position: absolute; top: 8px; right: 8px; z-index: 5; background: rgba(15,23,42,0.8); color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; justify-content: center;" title="Delete test photo">✕</button>`;
+        }
+
+        item.innerHTML = `
+          ${testBadge}
+          ${deleteBtn}
+          <img src="${photo.url}" alt="${photo.title}">
+          <div class="photo-overlay">
+            <div>
+              <span style="font-weight: 700; color: #fff; font-size: 0.95rem; display: block;">${photo.title}</span>
+              ${photo.subtitle ? `<span style="font-size: 0.75rem; color: #cbd5e1; display: block; margin-top: 2px;">${photo.subtitle}</span>` : ''}
+              <button onclick="event.stopPropagation(); setAsHtmlNoticeBoxTestImage('${photo.url}', '${photo.title.replace(/'/g, "\\'")}')" style="margin-top: 6px; background: #f59e0b; color: #0f172a; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.72rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Make this image the Notice Box Test Image">
+                🧪 Make Notice Box Test Image
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(item);
+      });
+    }
+
+    function setAsHtmlNoticeBoxTestImage(url, title) {
+      const boxTestImg = document.getElementById('html-notice-box-test-img');
+      if (boxTestImg) boxTestImg.src = url;
+      const boxCaption = document.getElementById('html-notice-box-caption');
+      if (boxCaption) boxCaption.innerText = title;
+      const boardImg = document.getElementById('html-notice-board-img');
+      if (boardImg) boardImg.src = url;
+      try {
+        localStorage.setItem('njs_html_notice_board_img', url);
+        localStorage.setItem('njs_html_notice_box_test_img', url);
+        localStorage.setItem('njs_html_notice_box_caption', title);
+      } catch (e) {}
+      alert(`✅ Notice Box Test Image updated to: "${title}"`);
+      const el = document.getElementById('notices');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    let currentHtmlTestDataUrl = '';
+
+    function openHtmlTestImageModal() {
+      const modal = document.getElementById('html-test-image-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeHtmlTestImageModal() {
+      const modal = document.getElementById('html-test-image-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function handleHtmlImageFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentHtmlTestDataUrl = e.target.result;
+        const previewBox = document.getElementById('html-test-preview-box');
+        const previewImg = document.getElementById('html-test-preview-img');
+        const titleInput = document.getElementById('html-test-title-input');
+        if (previewImg) previewImg.src = currentHtmlTestDataUrl;
+        if (previewBox) previewBox.style.display = 'block';
+        if (titleInput && !titleInput.value) {
+          titleInput.value = file.name.replace(/\.[^/.]+$/, '');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function previewHtmlTestImage() {
+      const url = document.getElementById('html-test-url-input').value.trim();
+      const previewBox = document.getElementById('html-test-preview-box');
+      const previewImg = document.getElementById('html-test-preview-img');
+      if (url) {
+        currentHtmlTestDataUrl = url;
+        if (previewImg) previewImg.src = url;
+        if (previewBox) previewBox.style.display = 'block';
+      }
+    }
+
+    function setHtmlSampleImage(url, title, subtitle) {
+      currentHtmlTestDataUrl = url;
+      document.getElementById('html-test-url-input').value = url;
+      document.getElementById('html-test-title-input').value = title;
+      document.getElementById('html-test-sub-input').value = subtitle;
+      const previewBox = document.getElementById('html-test-preview-box');
+      const previewImg = document.getElementById('html-test-preview-img');
+      if (previewImg) previewImg.src = url;
+      if (previewBox) previewBox.style.display = 'block';
+    }
+
+    function toggleHtmlUploadPasswordVisibility() {
+      const pwd = document.getElementById('html-upload-password');
+      if (pwd) {
+        pwd.type = pwd.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    function addHtmlTestImageToGallery() {
+      const url = currentHtmlTestDataUrl || document.getElementById('html-test-url-input').value.trim();
+      const pwdInput = document.getElementById('html-upload-password');
+      const pwdError = document.getElementById('html-upload-password-error');
+      const rawPassword = pwdInput ? pwdInput.value.trim() : '';
+
+      if (!url) {
+        alert('कृपया पहले कोई छवि चुनें या URL दर्ज करें। (Please select an image or enter URL)');
+        return;
+      }
+
+      // Password Verification: Admin password required to upload/apply image
+      const validAdminPasswords = ['gahlaut', '@nant', 'njs@2026', 'admin123', 'njsadmin', 'seemaanant'];
+      const isPasswordValid = validAdminPasswords.includes(rawPassword.toLowerCase()) || rawPassword === '@nant';
+
+      if (!isPasswordValid) {
+        if (pwdError) {
+          pwdError.style.display = 'block';
+          pwdError.innerHTML = '❌ गलत पासवर्ड! छवि अपलोड/लागू करने हेतु मान्य एडमिन पासवर्ड दर्ज करें। (Invalid admin password)';
+        }
+        if (pwdInput) {
+          pwdInput.style.borderColor = '#dc2626';
+          pwdInput.focus();
+        }
+        return;
+      }
+
+      if (pwdError) pwdError.style.display = 'none';
+
+      const title = document.getElementById('html-test-title-input').value.trim() || 'Custom Test Image';
+      const subtitle = document.getElementById('html-test-sub-input').value.trim() || 'Uploaded for test';
+      const targetSelect = document.getElementById('html-test-target-select');
+      const target = targetSelect ? targetSelect.value : 'gallery';
+
+      // 🧪 ALWAYS MAKE ADDED IMAGE NOTICE BOX TEST IMAGE (सूचना पट्ट परीक्षण छवि)
+      const boxTestImg = document.getElementById('html-notice-box-test-img');
+      if (boxTestImg) boxTestImg.src = url;
+      const boxCaption = document.getElementById('html-notice-box-caption');
+      if (boxCaption) boxCaption.innerText = title;
+      const boardImg = document.getElementById('html-notice-board-img');
+      if (boardImg) boardImg.src = url;
+      try {
+        localStorage.setItem('njs_html_notice_board_img', url);
+        localStorage.setItem('njs_html_notice_box_test_img', url);
+        localStorage.setItem('njs_html_notice_box_caption', title);
+      } catch (e) {}
+
+      // Always add to Gallery as well
+      const newPhoto = {
+        id: 'test-' + Date.now(),
+        url: url,
+        title: title,
+        subtitle: subtitle,
+        aspect: 'normal',
+        isTest: true
+      };
+
+      htmlGalleryPhotos.unshift(newPhoto);
+      try {
+        localStorage.setItem('njs_html_gallery_photos_v1', JSON.stringify(htmlGalleryPhotos));
+      } catch (e) {}
+      renderHtmlGallery();
+
+      closeHtmlTestImageModal();
+
+      // Reset fields
+      currentHtmlTestDataUrl = '';
+      document.getElementById('html-test-url-input').value = '';
+      document.getElementById('html-test-title-input').value = '';
+      document.getElementById('html-test-sub-input').value = '';
+      if (pwdInput) {
+        pwdInput.value = '';
+        pwdInput.style.borderColor = '#cbd5e1';
+      }
+      document.getElementById('html-test-preview-box').style.display = 'none';
+
+      alert(`✅ छवि सफलतापूर्वक Notice Box Test Image बनाई गई (पासवर्ड सत्यापित): "${title}"`);
+
+      // Scroll directly to notice box
+      const nb = document.getElementById('notices');
+      if (nb) nb.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function setHtmlNoticeBoxPreset(url, caption) {
+      const img = document.getElementById('html-notice-box-test-img');
+      if (img) img.src = url;
+      const cap = document.getElementById('html-notice-box-caption');
+      if (cap) cap.innerText = caption;
+      try {
+        localStorage.setItem('njs_html_notice_box_test_img', url);
+        localStorage.setItem('njs_html_notice_box_caption', caption);
+      } catch (e) {}
+    }
+
+    function openLightbox(url, title, desc) {
+      let modal = document.getElementById('njs-lightbox-modal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'njs-lightbox-modal';
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:99999;display:flex;justify-content:center;align-items:center;padding:16px;';
+        modal.onclick = () => { modal.style.display = 'none'; };
+        modal.innerHTML = `
+          <div style="max-width:850px;width:100%;background:#090d16;border-radius:20px;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.15);" onclick="event.stopPropagation()">
+            <div style="position:relative;background:#000;max-height:75vh;display:flex;justify-content:center;align-items:center;">
+              <img id="njs-lightbox-img" src="" style="max-width:100%;max-height:75vh;object-fit:contain;display:block;">
+              <button onclick="document.getElementById('njs-lightbox-modal').style.display='none'" style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+            </div>
+            <div style="padding:14px 20px;color:#fff;">
+              <h4 id="njs-lightbox-title" style="margin:0 0 4px;font-size:1.05rem;color:#38bdf8;"></h4>
+              <p id="njs-lightbox-desc" style="margin:0;font-size:0.82rem;color:#94a3b8;"></p>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
+      document.getElementById('njs-lightbox-img').src = url;
+      document.getElementById('njs-lightbox-title').innerText = title || 'Visual Preview';
+      document.getElementById('njs-lightbox-desc').innerText = desc || '';
+      modal.style.display = 'flex';
+    }
+
+    function enlargeNoticeBoxTestImage() {
+      const img = document.getElementById('html-notice-box-test-img');
+      const cap = document.getElementById('html-notice-box-caption');
+      if (img) {
+        openLightbox(img.src, cap ? cap.innerText : 'Notice Box Test Image', 'NJS Public School Circular Visual Attachment');
+      }
+    }
+
+    function removeHtmlTestImage(id) {
+      htmlGalleryPhotos = htmlGalleryPhotos.filter(p => p.id !== id);
+      try {
+        localStorage.setItem('njs_html_gallery_photos_v1', JSON.stringify(htmlGalleryPhotos));
+      } catch (e) {}
+      renderHtmlGallery();
+    }
+
+    function resetHtmlGallery() {
+      htmlGalleryPhotos = [...DEFAULT_HTML_PHOTOS];
+      try {
+        localStorage.removeItem('njs_html_gallery_photos_v1');
+      } catch (e) {}
+      renderHtmlGallery();
+    }
+
+    // Restore saved notice board image if any
+    try {
+      const savedBoardImg = localStorage.getItem('njs_html_notice_board_img');
+      if (savedBoardImg) {
+        const b = document.getElementById('html-notice-board-img');
+        if (b) b.src = savedBoardImg;
+      }
+      const savedBoxImg = localStorage.getItem('njs_html_notice_box_test_img');
+      if (savedBoxImg) {
+        const bi = document.getElementById('html-notice-box-test-img');
+        if (bi) bi.src = savedBoxImg;
+      }
+      const savedBoxCap = localStorage.getItem('njs_html_notice_box_caption');
+      if (savedBoxCap) {
+        const bc = document.getElementById('html-notice-box-caption');
+        if (bc) bc.innerText = savedBoxCap;
+      }
+    } catch (e) {}
+
+    // 📥 Download HTML Code Generator
+    function downloadHtmlFile() {
+      try {
+        const fullHtml = '<!doctype html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'NJS_Public_School_AI_Portal.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error('Download error:', err);
+        window.open('/assets/aistudio/NJS_Public_School_AI_Portal_5aeb7f6c.html', '_blank');
+      }
+    }
+
+    // Initial renders
+    renderNotices();
+    renderHtmlGallery();
+  </script>
+
+  <!-- Bottom Bar: Official Web Link -->
+  <div style="background: #020617; color: #94a3b8; text-align: center; padding: 12px 16px; font-size: 0.82rem; border-top: 1px solid rgba(255,255,255,0.1);">
+    Official Web Repository: 
+    <a href="https://seemaanantom-eng.github.io/NJSpublicSchool/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 700; text-decoration: underline; margin-left: 4px;">
+      https://seemaanantom-eng.github.io/NJSpublicSchool/
+    </a>
+  </div>
+
+
+</body></html>
